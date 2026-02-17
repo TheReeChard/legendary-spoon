@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PlayWard - Custom Theme</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="header visible" id="main-header">
+      <div
+        class="header-logo"
+        onclick="goToPage('index.html')"
+        style="cursor: pointer"
+      >
+        <img
+          src="images/logo.png"
+          alt="PlayWard Logo"
+          class="header-logo-img"
+        />
+        <span class="logo-text">PlayWard</span>
+      </div>
+      <nav class="header-nav">
+        <a href="about.html">About Us</a>
+        <span>|</span>
+        <a href="support.html">Support</a>
+      </nav>
+    </header>
+
+    <main class="main-content with-header">
+      <section class="page active">
+        <div class="page-wrapper">
+          <div class="page-content page-with-sidebar">
+            <div class="dynamic-sidebar" id="dynamic-sidebar">
+              <!-- Dynamic sidebar content -->
+            </div>
+            <div class="page-main">
+              <h1 class="page-title">Customize the Theme</h1>
+              <p class="page-subtitle">
+                Enter your custom theme name under "Specific Custom Theme"
+                below!<br /><br />If you would like to add a certain focus or
+                character to your theme as well, then type them in the spaces
+                provided below. One example of this is if you want your theme to
+                be "animals", and you want that theme to be "turtles".
+              </p>
+
+              <div class="custom-theme-form">
+                <div class="form-group">
+                  <label>Specific Custom Theme</label>
+                  <span class="hint">Example: cars, beach, summer, shapes</span>
+                  <input type="text" id="custom-theme-input" placeholder="" />
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Specific Theme Focus</label>
+                    <span class="hint">This is optional</span>
+                    <input type="text" id="theme-focus-input" placeholder="" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Specific Theme Character</label>
+                  <span class="hint">This is optional</span>
+                  <input
+                    type="text"
+                    id="theme-character-input"
+                    placeholder=""
+                  />
+                </div>
+                <div class="form-actions">
+                  <button class="btn btn-primary" onclick="saveCustomTheme()">
+                    Next
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="progress-breadcrumb" id="progress-breadcrumb"></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="shared.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        generateSidebar("custom-theme");
+        generateBreadcrumb("custom-theme");
+
+        // Populate fields with existing data
+        if (appData.customTheme) {
+          document.getElementById("custom-theme-input").value =
+            appData.customTheme;
+        }
+        if (appData.themeFocus) {
+          document.getElementById("theme-focus-input").value =
+            appData.themeFocus;
+        }
+        if (appData.themeCharacter) {
+          document.getElementById("theme-character-input").value =
+            appData.themeCharacter;
+        }
+      });
+
+      function saveCustomTheme() {
+        const customTheme = document
+          .getElementById("custom-theme-input")
+          .value.trim();
+        const themeFocus = document
+          .getElementById("theme-focus-input")
+          .value.trim();
+        const themeCharacter = document
+          .getElementById("theme-character-input")
+          .value.trim();
+
+        if (!customTheme) {
+          alert("Please enter a custom theme.");
+          return;
+        }
+
+        appData.customTheme = customTheme;
+        appData.themeFocus = themeFocus;
+        appData.themeCharacter = themeCharacter;
+        appData.theme = ""; // Clear default theme
+        saveAppData(appData);
+
+        goToPage("personalization.html");
+      }
+    </script>
+  </body>
+</html>

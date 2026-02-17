@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PlayWard - Review Selections</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="header visible" id="main-header">
+      <div
+        class="header-logo"
+        onclick="goToPage('index.html')"
+        style="cursor: pointer"
+      >
+        <img
+          src="images/logo.png"
+          alt="PlayWard Logo"
+          class="header-logo-img"
+        />
+        <span class="logo-text">PlayWard</span>
+      </div>
+      <nav class="header-nav">
+        <a href="about.html">About Us</a>
+        <span>|</span>
+        <a href="support.html">Support</a>
+      </nav>
+    </header>
+
+    <main class="main-content with-header">
+      <section class="page active">
+        <div class="page-wrapper">
+          <div class="page-content page-with-sidebar">
+            <div class="dynamic-sidebar" id="dynamic-sidebar">
+              <!-- Dynamic sidebar content -->
+            </div>
+            <div class="page-main">
+              <h1 class="page-title">Review Selections</h1>
+              <p class="page-subtitle">
+                Review your choices from the previous selection pages. If you
+                are happy with your choices, select the Generate Prompt button
+                to review the final prompt. If you need to make adjustments to
+                your choices, select the Edit Choices button to navigate to the
+                previous page.
+              </p>
+
+              <div class="review-content">
+                <div class="review-box">
+                  <div id="review-summary">
+                    <!-- Dynamic content -->
+                  </div>
+                </div>
+                <div class="review-actions">
+                  <button class="btn btn-outline" onclick="editChoices()">
+                    Edit Choices
+                  </button>
+                  <button class="btn btn-primary" onclick="goToFinal()">
+                    Generate Prompt
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="progress-breadcrumb" id="progress-breadcrumb"></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="shared.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        generateSidebar("review");
+        generateBreadcrumb("review");
+        loadReviewSummary();
+      });
+
+      function loadReviewSummary() {
+        const container = document.getElementById("review-summary");
+
+        const activityNames = {
+          coloring: "Coloring Page",
+          trivia: "Trivia",
+          "hidden-objects": "Hidden Objects",
+          story: "Short Story",
+          "activity-game": "Activity Game",
+        };
+
+        let html = `<p>Create a personalized <strong>${activityNames[appData.activityType]}</strong> for a <strong>${appData.ageRange || "7"}-year-old</strong> child with the theme of <strong>${formatTheme(appData.theme) || appData.customTheme}</strong>.</p><br>`;
+
+        html += `<strong>Activity Requirements:</strong><br>`;
+        html += `- Page Type: ${activityNames[appData.activityType]}<br>`;
+        html += `- Complexity / Age Level: ${getDifficulty()}<br>`;
+
+        if (appData.customization.artStyle) {
+          html += `- Art Style: ${appData.customization.artStyle}<br>`;
+        }
+
+        if (appData.themeCharacter) {
+          html += `- Theme Character: ${appData.themeCharacter}<br>`;
+        }
+
+        html += `<br><strong>Personalization:</strong><br>`;
+
+        if (appData.customization["child-nickname"]) {
+          html += `- Child's Nickname: ${appData.customization["child-nickname"]}<br>`;
+        }
+
+        const medicalContext = formatMedicalContext();
+        if (medicalContext) {
+          html += `- Medical Context: ${medicalContext}<br>`;
+        }
+
+        if (appData.diversity) {
+          html += `- Diversity: ${formatDiversityShort()}<br>`;
+        }
+
+        container.innerHTML = html;
+      }
+
+      function editChoices() {
+        goToPage("personalization.html");
+      }
+
+      function goToFinal() {
+        goToPage("final.html");
+      }
+    </script>
+  </body>
+</html>

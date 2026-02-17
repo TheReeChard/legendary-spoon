@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PlayWard - Instructions</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="header visible" id="main-header">
+      <div
+        class="header-logo"
+        onclick="goToPage('index.html')"
+        style="cursor: pointer"
+      >
+        <img
+          src="images/logo.png"
+          alt="PlayWard Logo"
+          class="header-logo-img"
+        />
+        <span class="logo-text">PlayWard</span>
+      </div>
+      <nav class="header-nav">
+        <a href="about.html">About Us</a>
+        <span>|</span>
+        <a href="support.html">Support</a>
+      </nav>
+    </header>
+
+    <main class="main-content with-header">
+      <section class="page active">
+        <div class="page-wrapper">
+          <div class="page-content">
+            <h1 class="page-title-large">
+              Creating with PlayWard is as easy as 1, 2, 3.
+            </h1>
+            <p class="page-subtitle-small">
+              Ready to create a great prompt? Follow the steps below and choose
+              Quick Create to save time with fewer settings, or select
+              Customized Prompt for a personalized result that requires a bit
+              more effort.
+            </p>
+
+            <div class="instructions-layout">
+              <div class="instructions-mascot">
+                <img src="images/girljumpright.png" alt="PlayWard Mascot" />
+              </div>
+              <div class="instructions-steps">
+                <div class="step">
+                  <span class="step-number">1</span>
+                  <div class="step-content">
+                    <p>
+                      Answer the on-screen questions to tailor the prompt's
+                      specific goals and features.
+                    </p>
+                  </div>
+                </div>
+                <div class="step">
+                  <span class="step-number">2</span>
+                  <div class="step-content">
+                    <p>
+                      Double-check your settings. Use the icons on the left to
+                      edit any details, or hit "Generate" if you're ready.
+                    </p>
+                  </div>
+                </div>
+                <div class="step">
+                  <span class="step-number">3</span>
+                  <div class="step-content">
+                    <p>
+                      Click "Copy and Open" to grab the text and automatically
+                      open the best AI for the job. Paste the prompt into the AI
+                      chat and send. Since AI can be unpredictable, review the
+                      results and feel free to re-run the prompt if it needs a
+                      second pass.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ready-section">
+              <h2>Ready to start generating?</h2>
+              <div class="button-group">
+                <button class="btn btn-outline" onclick="quickCreate()">
+                  Quick Create
+                </button>
+                <button
+                  class="btn btn-primary"
+                  onclick="goToPage('activity-select.html')"
+                >
+                  Customize prompt
+                </button>
+              </div>
+            </div>
+          </div>
+          <footer class="grass-footer">
+            <img src="images/grass.png" alt="" />
+          </footer>
+        </div>
+      </section>
+    </main>
+
+    <script src="shared.js"></script>
+    <script>
+      function quickCreate() {
+        // Set some defaults and go to activity selection
+        goToPage("activity-select.html");
+      }
+    </script>
+  </body>
+</html>

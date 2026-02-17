@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PlayWard - Final Prompt</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="header visible" id="main-header">
+      <div
+        class="header-logo"
+        onclick="goToPage('index.html')"
+        style="cursor: pointer"
+      >
+        <img
+          src="images/logo.png"
+          alt="PlayWard Logo"
+          class="header-logo-img"
+        />
+        <span class="logo-text">PlayWard</span>
+      </div>
+      <nav class="header-nav">
+        <a href="about.html">About Us</a>
+        <span>|</span>
+        <a href="support.html">Support</a>
+      </nav>
+    </header>
+
+    <main class="main-content with-header">
+      <section class="page active">
+        <div class="page-wrapper">
+          <div class="page-content page-with-sidebar">
+            <div class="dynamic-sidebar" id="dynamic-sidebar">
+              <!-- Dynamic sidebar content -->
+            </div>
+            <div class="page-main">
+              <h1 class="page-title">Review Final Prompt</h1>
+              <p class="page-subtitle">
+                When your prompt is generated, select the "Copy and Open" button
+                which will copy the prompt as well as open the most relevant AI
+                based on your selections. From there, simply select the AI's
+                chat function and paste the prompt. Once you hit the send
+                button, the AI will generate your activity! Make sure to check
+                the final product for accuracy as you may need to repeat the
+                prompt a couple of times for the AI to get it right.
+              </p>
+
+              <div class="final-prompt-section">
+                <h3>Final Prompt</h3>
+                <div class="prompt-box">
+                  <p id="generated-prompt">
+                    Your generated prompt will appear here...
+                  </p>
+                </div>
+                <button class="btn btn-primary btn-copy" onclick="copyPrompt()">
+                  Copy
+                </button>
+              </div>
+
+              <div class="ai-platforms-row">
+                <div
+                  class="platform-icon"
+                  onclick="openInAI('chatgpt')"
+                  title="Open in ChatGPT"
+                >
+                  <i class="fa-solid fa-robot"></i>
+                </div>
+                <div
+                  class="platform-icon"
+                  onclick="openInAI('gemini')"
+                  title="Open in Gemini"
+                >
+                  <i class="fa-solid fa-star"></i>
+                </div>
+                <div
+                  class="platform-icon"
+                  onclick="openInAI('claude')"
+                  title="Open in Claude"
+                >
+                  <i class="fa-solid fa-message"></i>
+                </div>
+              </div>
+
+              <div class="start-over-section">
+                <button class="btn btn-outline" onclick="startOver()">
+                  Start Over
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="progress-breadcrumb" id="progress-breadcrumb"></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Copy Notification -->
+    <div class="copy-notification" id="copy-notification"></div>
+
+    <script src="shared.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        generateSidebar("final");
+        generateBreadcrumb("final");
+
+        // Generate and display the prompt
+        const prompt = generatePrompt();
+        document.getElementById("generated-prompt").textContent = prompt;
+      });
+
+      function startOver() {
+        resetAppData();
+        goToPage("index.html");
+      }
+    </script>
+  </body>
+</html>

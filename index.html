@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PlayWard - AI Activity Prompt Generator</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="main-content">
+      <section class="page active" id="page-landing">
+        <div class="landing-container">
+          <div class="landing-content">
+            <img
+              src="images/logo.png"
+              alt="PlayWard Logo"
+              class="landing-logo"
+            />
+            <h1 class="landing-title">PlayWard</h1>
+            <p class="landing-tagline">
+              PlayWard is a fun, personalized activity platform for kids in
+              pediatric care
+            </p>
+            <button
+              class="btn btn-primary btn-large"
+              onclick="startCreating()"
+            >
+              Create
+            </button>
+          </div>
+          <div class="landing-mascot">
+            <img src="images/girljumpleft.png" alt="PlayWard Mascot" />
+          </div>
+        </div>
+        <footer class="grass-footer">
+          <img src="images/grass.png" alt="" />
+        </footer>
+      </section>
+    </main>
+
+    <script src="shared.js"></script>
+    <script>
+      function startCreating() {
+        // Reset app data when starting fresh
+        resetAppData();
+        window.location.href = "instructions.html";
+      }
+    </script>
+  </body>
+</html>

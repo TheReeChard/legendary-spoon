@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PlayWard - Support</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="header visible" id="main-header">
+      <div
+        class="header-logo"
+        onclick="goToPage('index.html')"
+        style="cursor: pointer"
+      >
+        <img
+          src="images/logo.png"
+          alt="PlayWard Logo"
+          class="header-logo-img"
+        />
+        <span class="logo-text">PlayWard</span>
+      </div>
+      <nav class="header-nav">
+        <a href="about.html">About Us</a>
+        <span>|</span>
+        <a href="support.html" class="active">Support</a>
+      </nav>
+    </header>
+
+    <main class="main-content with-header">
+      <section class="page active">
+        <div class="page-wrapper">
+          <div class="page-content support-page">
+            <!-- Support Header -->
+            <div class="support-header">
+              <h1 class="page-title">Need Help?</h1>
+              <p class="support-description">
+                Having trouble or just looking around? We can help! On this page
+                you can find video tutorials of how our portal works as well as
+                a FAQs section that can help you troubleshoot if necessary.
+              </p>
+            </div>
+
+            <!-- Video Tutorials Section -->
+            <div class="video-section">
+              <div class="video-container">
+                <h3 class="video-title">Creating a Custom Prompt Video</h3>
+                <div class="video-wrapper">
+                  <iframe
+                    src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                    title="Creating a Custom Prompt Video"
+                    frameborder="0"
+                    allow="
+                      accelerometer;
+                      autoplay;
+                      clipboard-write;
+                      encrypted-media;
+                      gyroscope;
+                      picture-in-picture;
+                    "
+                    allowfullscreen
+                  >
+                  </iframe>
+                </div>
+              </div>
+              <div class="video-container">
+                <h3 class="video-title">Using a prebuilt prompt Video</h3>
+                <div class="video-wrapper">
+                  <iframe
+                    src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                    title="Using a prebuilt prompt Video"
+                    frameborder="0"
+                    allow="
+                      accelerometer;
+                      autoplay;
+                      clipboard-write;
+                      encrypted-media;
+                      gyroscope;
+                      picture-in-picture;
+                    "
+                    allowfullscreen
+                  >
+                  </iframe>
+                </div>
+              </div>
+            </div>
+
+            <!-- FAQs Section -->
+            <div class="faq-section">
+              <div class="faq-mascot">
+                <img src="images/girljumpright.png" alt="PlayWard Mascot" />
+              </div>
+              <div class="faq-content">
+                <h2 class="faq-title">FAQs/Troubleshooting</h2>
+
+                <div class="faq-list">
+                  <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                      <span>My prompt won't work, what should I do?</span>
+                      <i class="fa-solid fa-plus"></i>
+                    </div>
+                    <div class="faq-answer">
+                      <p>
+                        Try inputting the prompt into the AI again. If this does
+                        not work, tell the AI what is wrong with the prompt and
+                        test if it will fix it.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                      <span>I can't get the prompt to copy.</span>
+                      <i class="fa-solid fa-plus"></i>
+                    </div>
+                    <div class="faq-answer">
+                      <p>
+                        If you cannot get the prompt to copy through the "Copy
+                        and Open" button then simply select the prompt text and
+                        copy it manually with your device.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                      <span>Which AI should I use?</span>
+                      <i class="fa-solid fa-plus"></i>
+                    </div>
+                    <div class="faq-answer">
+                      <p>
+                        You aren't restricted to our suggestions. While we
+                        recommend specific models based on our testing for each
+                        prompt type, you are free to use any AI platform you
+                        prefer.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                      <span>How do I generate a different type puzzle?</span>
+                      <i class="fa-solid fa-plus"></i>
+                    </div>
+                    <div class="faq-answer">
+                      <p>
+                        To start over, return to the home page. If you are
+                        mid-process, click the top-left icon to jump back to the
+                        activity selection screen.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <footer class="grass-footer">
+            <img src="images/grass.png" alt="" />
+          </footer>
+        </div>
+      </section>
+    </main>
+
+    <script src="shared.js"></script>
+    <script>
+      function toggleFaq(element) {
+        const faqItem = element.parentElement;
+        const icon = element.querySelector("i");
+
+        // Close all other FAQs
+        document.querySelectorAll(".faq-item").forEach((item) => {
+          if (item !== faqItem) {
+            item.classList.remove("active");
+            item.querySelector("i").classList.remove("fa-minus");
+            item.querySelector("i").classList.add("fa-plus");
+          }
+        });
+
+        // Toggle current FAQ
+        faqItem.classList.toggle("active");
+
+        if (faqItem.classList.contains("active")) {
+          icon.classList.remove("fa-plus");
+          icon.classList.add("fa-minus");
+        } else {
+          icon.classList.remove("fa-minus");
+          icon.classList.add("fa-plus");
+        }
+      }
+    </script>
+  </body>
+</html>
