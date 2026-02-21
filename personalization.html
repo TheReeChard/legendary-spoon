@@ -9,6 +9,50 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
     <link rel="stylesheet" href="styles.css" />
+    <style>
+      .tooltip-wrapper {
+        position: relative;
+        display: inline-block;
+      }
+      .tooltip-wrapper .tooltip-box {
+        visibility: hidden;
+        opacity: 0;
+        background-color: #333;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 400;
+        line-height: 1.5;
+        text-align: left;
+        border-radius: 8px;
+        padding: 10px 14px;
+        width: 280px;
+        position: absolute;
+        top: 50%;
+        left: calc(100% + 10px);
+        transform: translateY(-50%);
+        z-index: 100;
+        transition: opacity 0.2s ease;
+        pointer-events: none;
+      }
+      .tooltip-wrapper .tooltip-box::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: 100%;
+        transform: translateY(-50%);
+        border: 6px solid transparent;
+        border-right-color: #333;
+      }
+      .tooltip-wrapper:hover .tooltip-box,
+      .tooltip-wrapper.active .tooltip-box {
+        visibility: visible;
+        opacity: 1;
+      }
+      .info-tooltip {
+        cursor: pointer;
+        color: #888;
+      }
+    </style>
   </head>
   <body>
     <header class="header visible" id="main-header">
@@ -35,25 +79,35 @@
       <section class="page active">
         <div class="page-wrapper">
           <div class="page-content page-with-sidebar">
-            <div class="dynamic-sidebar" id="dynamic-sidebar">
-              <!-- Dynamic sidebar content -->
-            </div>
+            <div class="dynamic-sidebar" id="dynamic-sidebar"></div>
             <div class="page-main">
               <h1 class="page-title">Select a Personalization</h1>
               <p class="page-subtitle">
-                This is where you can include any medical, diversity, or age
-                range considerations into your prompt. For example, if the
-                patient is arm being in a cast is something you wish to include
-                into the generated material, you would select the icon below.
-                All selections on this page are optional, and if you wish to
-                skip this page simply press the "Next" button.
+                This is where you can include any medical consideration into
+                your prompt. For example, if the patient's arm is in a cast, you
+                can select the icon below to include that within the play
+                material. All selections on this page are optional, and if you
+                wish to skip this page simply press the "Skip" button. You can
+                also select multiple considerations to be included. Once you
+                have all your selections made click the "Next" button to
+                continue.
               </p>
 
               <div class="personalization-content">
                 <div class="medical-section">
                   <h3>
                     Medical Considerations
-                    <i class="fa-solid fa-circle-info info-tooltip"></i>
+                    <span
+                      class="tooltip-wrapper"
+                      onclick="this.classList.toggle('active')"
+                      ><i class="fa-solid fa-circle-info info-tooltip"></i
+                      ><span class="tooltip-box"
+                        >Select any medical considerations that you want
+                        represented for the activity being generated in order to
+                        ensure inclusivity and patient safety. Please select all
+                        that apply.</span
+                      ></span
+                    >
                   </h3>
                   <div class="medical-grid-new">
                     <div
@@ -61,7 +115,7 @@
                       data-medical="wheelchair"
                       onclick="toggleMedical('wheelchair')"
                     >
-                      <div class="medical-circle">
+                      <div class="medical-diamond">
                         <img src="images/wheelchair.png" alt="Wheelchair" />
                       </div>
                       <span>Wheelchair</span>
@@ -71,27 +125,27 @@
                       data-medical="syringe"
                       onclick="toggleMedical('syringe')"
                     >
-                      <div class="medical-circle">
+                      <div class="medical-diamond">
                         <img src="images/syringe.png" alt="Syringe" />
                       </div>
                       <span>Syringe</span>
                     </div>
                     <div
                       class="medical-item"
-                      data-medical="anxiety"
-                      onclick="toggleMedical('anxiety')"
+                      data-medical="pain"
+                      onclick="toggleMedical('pain')"
                     >
-                      <div class="medical-circle">
-                        <img src="images/anxiety.png" alt="Anxiety" />
+                      <div class="medical-diamond">
+                        <img src="images/pain.png" alt="Pain" />
                       </div>
-                      <span>Anxiety</span>
+                      <span>Pain</span>
                     </div>
                     <div
                       class="medical-item"
                       data-medical="surgery"
                       onclick="toggleMedical('surgery')"
                     >
-                      <div class="medical-circle">
+                      <div class="medical-diamond">
                         <img src="images/surgery.png" alt="Surgery" />
                       </div>
                       <span>Surgery</span>
@@ -101,125 +155,102 @@
                       data-medical="cast"
                       onclick="toggleMedical('cast')"
                     >
-                      <div class="medical-circle">
+                      <div class="medical-diamond">
                         <img src="images/cast.png" alt="Cast" />
                       </div>
                       <span>Cast</span>
                     </div>
                     <div
                       class="medical-item"
-                      data-medical="pain"
-                      onclick="toggleMedical('pain')"
+                      data-medical="anxiety"
+                      onclick="toggleMedical('anxiety')"
                     >
-                      <div class="medical-circle">
-                        <img src="images/pain.png" alt="Pain" />
+                      <div class="medical-diamond">
+                        <img src="images/anxiety.png" alt="Anxiety" />
                       </div>
-                      <span>Pain</span>
+                      <span>Anxiety</span>
                     </div>
                   </div>
-                </div>
-
-                <div class="dropdowns-row">
-                  <div class="form-group">
-                    <label
-                      >Age Range
-                      <i class="fa-solid fa-circle-info info-tooltip"></i
-                    ></label>
-                    <select id="age-range">
-                      <option value="">Select...</option>
-                      <option value="3-5">3-5 years</option>
-                      <option value="6-8">6-8 years</option>
-                      <option value="9-11">9-11 years</option>
-                      <option value="12-14">12-14 years</option>
-                      <option value="15-18">15-18 years</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label
-                      >Diversity Consideration
-                      <i class="fa-solid fa-circle-info info-tooltip"></i
-                    ></label>
-                    <select id="diversity-select">
-                      <option value="">Select...</option>
-                      <option value="multicultural">
-                        Multicultural representation
-                      </option>
-                      <option value="gender-inclusive">Gender-inclusive</option>
-                      <option value="accessibility">
-                        Visual accessibility
-                      </option>
-                      <option value="language">Simplified language</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="form-actions right">
-                  <button
-                    class="btn btn-primary"
-                    onclick="savePersonalization()"
-                  >
-                    Next
-                  </button>
                 </div>
               </div>
             </div>
           </div>
-          <div class="progress-breadcrumb" id="progress-breadcrumb"></div>
+
+          <div class="breadcrumb-with-back">
+            <button class="btn btn-outline btn-back" onclick="goBack()">
+              Back
+            </button>
+            <div class="breadcrumb-right-actions">
+              <button class="btn btn-outline" onclick="skipToPage2()">
+                Skip
+              </button>
+              <button class="btn btn-primary" onclick="nextToPage2()">
+                Next
+              </button>
+            </div>
+            <div class="progress-breadcrumb" id="progress-breadcrumb"></div>
+          </div>
         </div>
       </section>
     </main>
 
     <script src="shared.js"></script>
     <script>
+      document.addEventListener("click", function (e) {
+        document
+          .querySelectorAll(".tooltip-wrapper.active")
+          .forEach(function (el) {
+            if (!el.contains(e.target)) {
+              el.classList.remove("active");
+            }
+          });
+      });
+
       document.addEventListener("DOMContentLoaded", function () {
         generateSidebar("personalization");
         generateBreadcrumb("personalization");
 
-        // Restore previous selections
         appData.medicalConsiderations.forEach((medical) => {
           const item = document.querySelector(
             `.medical-item[data-medical="${medical}"]`,
           );
-          if (item) {
-            item.classList.add("selected");
-          }
+          if (item) item.classList.add("selected");
         });
-
-        if (appData.ageRange) {
-          document.getElementById("age-range").value = appData.ageRange;
-        }
-
-        if (appData.diversity) {
-          document.getElementById("diversity-select").value = appData.diversity;
-        }
       });
+
+      function goBack() {
+        if (appData.themeType === "custom") {
+          goToPage("custom-theme.html");
+        } else {
+          goToPage("default-themes.html");
+        }
+      }
 
       function toggleMedical(medical) {
         const item = document.querySelector(
           `.medical-item[data-medical="${medical}"]`,
         );
-
         if (appData.medicalConsiderations.includes(medical)) {
-          // Remove
           appData.medicalConsiderations = appData.medicalConsiderations.filter(
             (m) => m !== medical,
           );
           item.classList.remove("selected");
         } else {
-          // Add
           appData.medicalConsiderations.push(medical);
           item.classList.add("selected");
         }
-
         saveAppData(appData);
       }
 
-      function savePersonalization() {
-        appData.ageRange = document.getElementById("age-range").value;
-        appData.diversity = document.getElementById("diversity-select").value;
+      function nextToPage2() {
         saveAppData(appData);
+        goToPage("personalization2.html");
+      }
 
-        goToPage("customization.html");
+      function skipToPage2() {
+        appData.medicalConsiderations = [];
+        saveAppData(appData);
+        goToPage("personalization2.html");
       }
     </script>
   </body>

@@ -57,43 +57,33 @@
                     Your generated prompt will appear here...
                   </p>
                 </div>
-                <button class="btn btn-primary btn-copy" onclick="copyPrompt()">
-                  Copy
-                </button>
-              </div>
-
-              <div class="ai-platforms-row">
                 <div
-                  class="platform-icon"
-                  onclick="openInAI('chatgpt')"
-                  title="Open in ChatGPT"
+                  style="
+                    display: flex;
+                    justify-content: flex-end;
+                    margin-top: 12px;
+                  "
                 >
-                  <i class="fa-solid fa-robot"></i>
+                  <button
+                    class="btn btn-primary btn-copy"
+                    onclick="copyAndOpenAI()"
+                    style="color: #000000"
+                  >
+                    Copy and Open Gemini
+                  </button>
                 </div>
-                <div
-                  class="platform-icon"
-                  onclick="openInAI('gemini')"
-                  title="Open in Gemini"
-                >
-                  <i class="fa-solid fa-star"></i>
-                </div>
-                <div
-                  class="platform-icon"
-                  onclick="openInAI('claude')"
-                  title="Open in Claude"
-                >
-                  <i class="fa-solid fa-message"></i>
-                </div>
-              </div>
-
-              <div class="start-over-section">
-                <button class="btn btn-outline" onclick="startOver()">
-                  Start Over
-                </button>
               </div>
             </div>
           </div>
-          <div class="progress-breadcrumb" id="progress-breadcrumb"></div>
+          <div class="breadcrumb-with-back">
+            <button
+              class="btn btn-outline btn-back"
+              onclick="goToPage('review.html')"
+            >
+              Back
+            </button>
+            <div class="progress-breadcrumb" id="progress-breadcrumb"></div>
+          </div>
         </div>
       </section>
     </main>
@@ -111,6 +101,10 @@
         const prompt = generatePrompt();
         document.getElementById("generated-prompt").textContent = prompt;
       });
+
+      function copyAndOpenAI() {
+        openInAI("gemini");
+      }
 
       function startOver() {
         resetAppData();

@@ -51,7 +51,15 @@
               </div>
             </div>
           </div>
-          <div class="progress-breadcrumb" id="progress-breadcrumb"></div>
+          <div class="breadcrumb-with-back">
+            <button
+              class="btn btn-outline btn-back"
+              onclick="goToPage('personalization2.html')"
+            >
+              Back
+            </button>
+            <div class="progress-breadcrumb" id="progress-breadcrumb"></div>
+          </div>
         </div>
       </section>
     </main>
@@ -77,25 +85,40 @@
         );
         contentContainer.innerHTML = getCustomizationContent();
 
+        // Event delegation for art style clicks — bulletproof regardless of child elements
+        contentContainer.addEventListener("click", function (e) {
+          const item = e.target.closest(".art-style-item");
+          if (!item) return;
+          const style = item.getAttribute("data-style");
+          if (!style) return;
+
+          const autoAdvance = item.getAttribute("data-auto-advance") === "true";
+          if (autoAdvance) {
+            selectArtStyleAndAdvance(style);
+          } else {
+            selectArtStyle(style);
+          }
+        });
+
         // Update title and subtitle based on activity
         const titleEl = document.getElementById("customization-title");
         const subtitleEl = document.getElementById("customization-subtitle");
 
         switch (appData.activityType) {
-          case "coloring":
-            titleEl.textContent = "Coloring Page Customization";
+          case "spot-the-difference":
+            titleEl.textContent = "Spot the Differences Customization";
             subtitleEl.textContent =
-              "Select the style of the visuals on your final piece from one of the icons below.";
-            break;
-          case "trivia":
-            titleEl.textContent = "Trivia Customization";
-            subtitleEl.textContent =
-              "Select the aspects of the trivia game you want to adjust here. These selections are optional.";
+              "Select the style of the visuals on your final piece from one of the icons below. You can also choose to add specific objects to include and the number of differences by typing your preferences in the text boxes provided below.";
             break;
           case "hidden-objects":
             titleEl.textContent = "Hidden Objects Customization";
             subtitleEl.textContent =
               "Select the style of the visuals on your final piece from one of the icons below. You can also choose to add any specific objects you want to include by typing them in the text box below.";
+            break;
+          case "coloring":
+            titleEl.textContent = "Coloring Page Customization";
+            subtitleEl.textContent =
+              "Select the style of the visuals on your final piece from one of the icons below.";
             break;
           case "story":
             titleEl.textContent = "Short Story Customization";

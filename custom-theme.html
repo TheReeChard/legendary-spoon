@@ -64,21 +64,18 @@
                 <div class="form-group">
                   <label>Specific Theme Character</label>
                   <span class="hint">This is optional</span>
-                  <input
-                    type="text"
-                    id="theme-character-input"
-                    placeholder=""
-                  />
-                </div>
-                <div class="form-actions">
-                  <button class="btn btn-primary" onclick="saveCustomTheme()">
-                    Next
-                  </button>
+                  <input type="text" id="theme-character-input" placeholder="" />
                 </div>
               </div>
             </div>
           </div>
-          <div class="progress-breadcrumb" id="progress-breadcrumb"></div>
+                              <div class="breadcrumb-with-back">
+            <button class="btn btn-outline btn-back" onclick="goToPage('theme-type.html')">Back</button>
+            <div class="breadcrumb-right-actions">
+              <button class="btn btn-primary" onclick="saveCustomTheme()">Next</button>
+            </div>
+            <div class="progress-breadcrumb" id="progress-breadcrumb"></div>
+          </div>
         </div>
       </section>
     </main>

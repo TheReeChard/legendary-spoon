@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Desktop - Quick Create - Review</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .qc-final-section {
+        max-width: 680px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .qc-final-section h2 {
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .qc-final-section .qc-final-sub {
+        font-size: 13px;
+        color: var(--color-text-secondary);
+        margin-bottom: 20px;
+        line-height: 1.5;
+      }
+
+      .qc-prompt-box {
+        background: #f0f0f0;
+        border-radius: 12px;
+        padding: 28px 30px;
+        text-align: left;
+        min-height: 220px;
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--color-text);
+        border: none;
+        width: 100%;
+        resize: vertical;
+        font-family: inherit;
+        outline: none;
+      }
+
+      .qc-final-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header visible" id="main-header">
+      <div class="header-logo" onclick="goToPage('index.html')" style="cursor: pointer">
+        <img src="images/logo.png" alt="PlayWard Logo" class="header-logo-img" />
+        <span class="logo-text">PlayWard</span>
+      </div>
+      <nav class="header-nav">
+        <a href="about.html">About Us</a>
+        <span>|</span>
+        <a href="support.html">Support</a>
+      </nav>
+    </header>
+
+    <main class="main-content with-header">
+      <section class="page active">
+        <div class="page-wrapper">
+          <div class="page-content page-with-sidebar">
+            <div class="dynamic-sidebar" id="dynamic-sidebar"></div>
+            <div class="page-main">
+              <h1 class="page-title">Review/Edit the Quick Create Prompt</h1>
+              <p class="page-subtitle">
+                When your prompt is generated, select the "Copy and Open" button. The prompt will be copied and the recommended AI prompt engine will be opened in a new browser window. From there, simply select the AI's chat function and paste the prompt. Once you hit the send button, the AI will generate your activity! Make sure to check the final product for accuracy.
+              </p>
+
+              <div class="qc-final-section">
+                <h2>Final Quick Create Prompt</h2>
+                <p class="qc-final-sub">
+                  If you need to change the prompt, you can either go back to previous<br>
+                  selections or click into the text box to type in and change the prompt manually.
+                </p>
+                <textarea class="qc-prompt-box" id="qc-generated-prompt"></textarea>
+                <div class="qc-final-actions">
+                  <button class="btn btn-primary" onclick="copyAndOpenGemini()">Copy and Open Gemini</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="breadcrumb-with-back">
+            <button class="btn btn-outline btn-back" onclick="goToPage('qc-theme.html')">Back</button>
+            <div class="progress-breadcrumb" id="progress-breadcrumb"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="shared.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        generateQCSidebar(2);
+        generateQCBreadcrumb(2);
+        generateQCPrompt();
+      });
+
+      function generateQCPrompt() {
+        const activity = qcData.activity || "coloring";
+        const theme = qcData.theme || "superheroes";
+
+        const themeLabel = theme.charAt(0).toUpperCase() + theme.slice(1);
+
+        const templates = {
+          coloring: `Create a personalized, printable PDF coloring page for a child with the theme of ${themeLabel}.\n\nActivity Requirements:\n- Page Type: Standard Coloring Page\n- Complexity / Age Level: Medium\n- Art Style: Bold Cartoon Lines\n- Theme: ${themeLabel}\n\nThe page should feature bold outlines and fun, age-appropriate imagery themed around ${themeLabel}. Keep the design engaging and easy to color with clear sections and a cheerful overall feel.`,
+
+          "spot-the-difference": `Create a personalized, printable spot-the-difference activity for a child with the theme of ${themeLabel}.\n\nActivity Requirements:\n- Page Type: Spot the Difference\n- Complexity / Age Level: Medium\n- Number of Differences: 5\n- Theme: ${themeLabel}\n\nCreate two nearly identical side-by-side illustrations featuring ${themeLabel}-themed imagery with 5 subtle differences between them. Include a checklist at the bottom for the child to mark each difference they find.`,
+
+          "hidden-objects": `Create a personalized, printable hidden objects activity for a child with the theme of ${themeLabel}.\n\nActivity Requirements:\n- Page Type: Hidden Objects\n- Complexity / Age Level: Medium\n- Theme: ${themeLabel}\n\nCreate a detailed, fun scene themed around ${themeLabel} with 10 hidden objects for the child to find. Include a picture checklist of the objects to find at the bottom of the page.`,
+        };
+
+        const prompt = templates[activity] || templates.coloring;
+        document.getElementById("qc-generated-prompt").value = prompt;
+      }
+
+      function copyAndOpenGemini() {
+        const prompt = document.getElementById("qc-generated-prompt").value;
+        navigator.clipboard.writeText(prompt).then(() => {
+          window.open("https://gemini.google.com/app", "_blank");
+        }).catch(() => {
+          window.open("https://gemini.google.com/app", "_blank");
+        });
+      }
+    </script>
+  </body>
+</html>

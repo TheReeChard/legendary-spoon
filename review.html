@@ -54,18 +54,33 @@
                     <!-- Dynamic content -->
                   </div>
                 </div>
-                <div class="review-actions">
-                  <button class="btn btn-outline" onclick="editChoices()">
-                    Edit Choices
-                  </button>
-                  <button class="btn btn-primary" onclick="goToFinal()">
+                <div
+                  style="
+                    display: flex;
+                    justify-content: flex-end;
+                    margin-top: 12px;
+                  "
+                >
+                  <button
+                    class="btn btn-primary"
+                    onclick="goToFinal()"
+                    style="color: #000000"
+                  >
                     Generate Prompt
                   </button>
                 </div>
               </div>
             </div>
           </div>
-          <div class="progress-breadcrumb" id="progress-breadcrumb"></div>
+          <div class="breadcrumb-with-back">
+            <button
+              class="btn btn-outline btn-back"
+              onclick="goToPage('customization.html')"
+            >
+              Back
+            </button>
+            <div class="progress-breadcrumb" id="progress-breadcrumb"></div>
+          </div>
         </div>
       </section>
     </main>
@@ -83,10 +98,10 @@
 
         const activityNames = {
           coloring: "Coloring Page",
-          trivia: "Trivia",
+          "spot-the-difference": "Spot the Difference",
           "hidden-objects": "Hidden Objects",
-          story: "Short Story",
-          "activity-game": "Activity Game",
+          crossword: "Crossword",
+          wordsearch: "Word Search",
         };
 
         let html = `<p>Create a personalized <strong>${activityNames[appData.activityType]}</strong> for a <strong>${appData.ageRange || "7"}-year-old</strong> child with the theme of <strong>${formatTheme(appData.theme) || appData.customTheme}</strong>.</p><br>`;

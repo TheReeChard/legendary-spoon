@@ -56,9 +56,9 @@ const activityConfig = {
     icon: "images/coloringpage.png",
     color: "#e8f5e9",
   },
-  trivia: {
-    name: "Trivia",
-    icon: "images/trivia.png",
+  "spot-the-difference": {
+    name: "Spot the Difference",
+    icon: "images/spotdiff.png",
     color: "#fff3e0",
   },
   "hidden-objects": {
@@ -66,14 +66,14 @@ const activityConfig = {
     icon: "images/hiddenobject.png",
     color: "#e3f2fd",
   },
-  story: {
-    name: "Short Story",
-    icon: "images/shortstory.png",
+  crossword: {
+    name: "Crossword",
+    icon: "images/crossword.png",
     color: "#fce4ec",
   },
-  "activity-game": {
-    name: "Game",
-    icon: "images/activity.png",
+  wordsearch: {
+    name: "Word Search",
+    icon: "images/wordsearch.png",
     color: "#f3e5f5",
   },
 };
@@ -109,25 +109,27 @@ Activity Requirements:
 
 Personalization:
 {NICKNAME_LINE}- Medical Context: {MEDICAL_CONTEXT}
-
+{CHILD_DESCRIPTION_LINE}
 {DIVERSITY_REQUIREMENTS}
 
-The page should be a standard coloring page with medium complexity and bold cartoon lines. The main character should be a kid superhero flying over the city.{NICKNAME_INSTRUCTION} Include action stars, clouds, and motion lines throughout the scene. The overall feeling should highlight strength and confidence.{NICKNAME_TEXT_INSTRUCTION}`,
+The page should be a standard coloring page with medium complexity and bold cartoon lines.{NICKNAME_INSTRUCTION}{NICKNAME_TEXT_INSTRUCTION}`,
 
-  trivia: `Create a personalized trivia game for a {AGE_GROUP} year old child with the theme of {THEME}.
+  "spot-the-difference": `Create a personalized, printable spot-the-difference activity for a {AGE_GROUP} year old child with the theme of {THEME}.
 
 Activity Requirements:
-- Game Style: {GAME_STYLE}
-- Question Count: {QUESTION_COUNT}
-- Story Complexity: {STORY_COMPLEXITY}
+- Page Type: Spot the Difference
+- Complexity / Age Level: {DIFFICULTY}
+- Art Style: {ART_STYLE}
 - Theme or Character: {CHARACTER_INFO}
+- Number of Differences: {NUM_DIFFERENCES}
+- Objects to Include: {OBJECTS_TO_INCLUDE}
 
 Personalization:
 {NICKNAME_LINE}- Medical Context: {MEDICAL_CONTEXT}
-
+{CHILD_DESCRIPTION_LINE}
 {DIVERSITY_REQUIREMENTS}
 
-Create engaging, age-appropriate trivia questions that are fun and educational. Include interesting facts and explanations with each answer.{NICKNAME_INSTRUCTION}`,
+Create two nearly identical side-by-side illustrations based on the theme, with {NUM_DIFFERENCES} subtle differences between them. Include a checklist or answer key at the bottom.{NICKNAME_INSTRUCTION}`,
 
   "hidden-objects": `Create a personalized hidden objects activity for a {AGE_GROUP} year old child with the theme of {THEME}.
 
@@ -140,19 +142,17 @@ Activity Requirements:
 
 Personalization:
 {NICKNAME_LINE}- Medical Context: {MEDICAL_CONTEXT}
-
+{CHILD_DESCRIPTION_LINE}
 {DIVERSITY_REQUIREMENTS}
 
 Create a detailed scene with hidden objects that are challenging but findable. Include a checklist of items to find.{NICKNAME_INSTRUCTION}`,
 
-  story: `Create a personalized short story for a {AGE_GROUP} year old child with the theme of {THEME}.
+  crossword: `Create a personalized, printable crossword puzzle for a {AGE_GROUP} year old child with the theme of {THEME}.
 
 Activity Requirements:
-- Story Style: {STORY_STYLE}
-- Story Setting: {STORY_SETTING}
-- Story Genre: {STORY_GENRE}
-- Story Complexity: {STORY_COMPLEXITY}
-- Writing Style: {WRITING_STYLE}
+- Page Type: Crossword Puzzle
+- Difficulty: {DIFFICULTY}
+- Word Count: {WORD_COUNT}
 - Theme or Character: {CHARACTER_INFO}
 
 Personalization:
@@ -160,14 +160,14 @@ Personalization:
 
 {DIVERSITY_REQUIREMENTS}
 
-Create an engaging, age-appropriate story with relatable characters and positive messages.{NICKNAME_INSTRUCTION}`,
+Generate age-appropriate crossword clues and answers themed around {THEME}. Include an answer key on a separate section.{NICKNAME_INSTRUCTION}`,
 
-  "activity-game": `Create a personalized activity game for a {AGE_GROUP} year old child with the theme of {THEME}.
+  wordsearch: `Create a personalized, printable word search puzzle for a {AGE_GROUP} year old child with the theme of {THEME}.
 
 Activity Requirements:
-- Activity Location: {ACTIVITY_LOCATION}
-- Number of Participants: {NUM_PARTICIPANTS}
-- Specific Restrictions: {RESTRICTIONS}
+- Page Type: Word Search
+- Difficulty: {DIFFICULTY}
+- Grid Size: {GRID_SIZE}
 - Theme or Character: {CHARACTER_INFO}
 
 Personalization:
@@ -175,7 +175,7 @@ Personalization:
 
 {DIVERSITY_REQUIREMENTS}
 
-Create clear game instructions with variations for different skill levels. The activity should be achievable and provide positive engagement.{NICKNAME_INSTRUCTION}`,
+Generate a {GRID_SIZE} word search grid filled with theme-related words. Include the word list below the grid and an answer key.{NICKNAME_INSTRUCTION}`,
 };
 
 // ========================================
@@ -254,83 +254,109 @@ function generateSidebar(currentPage) {
 
   if (!activity) {
     sidebarContainer.innerHTML = `
-      <div class="sidebar-item" onclick="goToPage('activity-select.html')">
+      <div class="sidebar-item active" onclick="goToPage('activity-select.html')">
         <div class="sidebar-icon-bg rectangle">
           <img src="images/coloringpage.png" alt="Select Activity">
         </div>
-        <span>Select Activity</span>
       </div>
     `;
     return;
   }
 
+  // Determine how many sidebar icons to show based on current page
+  const stepOrder = [
+    "theme-type",
+    "default-themes",
+    "custom-theme",
+    "personalization",
+    "personalization2",
+    "customization",
+    "review",
+    "final",
+  ];
+  const stepIndex = stepOrder.indexOf(currentPage);
+
   let html = "";
 
-  // Activity (always show selected activity) - rounded rectangle
+  // 1. Activity — always show (rectangle)
+  const activityLabel = activity.name || "";
   html += `
     <div class="sidebar-item ${currentPage === "activity-select" ? "active" : ""}" onclick="goToPage('activity-select.html')" title="Change Activity">
       <div class="sidebar-icon-bg rectangle">
         <img src="${activity.icon}" alt="${activity.name}">
       </div>
-      <span>${activity.name}</span>
+      ${currentPage !== "activity-select" ? `<span class="sidebar-label">${activityLabel}</span>` : ""}
     </div>
   `;
 
-  // Theme (if set) - rounded square
-  if (appData.theme || appData.customTheme) {
-    const themeName = appData.customTheme || formatTheme(appData.theme);
+  // 2. Theme — show from theme-type onward (square)
+  if (stepIndex >= 0) {
     const themeIcon =
       appData.themeType === "custom"
         ? "images/customtheme.png"
         : "images/defaulttheme.png";
+    const themeLabel = appData.customTheme
+      ? appData.customTheme
+      : appData.theme
+        ? appData.theme.charAt(0).toUpperCase() + appData.theme.slice(1)
+        : "";
+    const isThemeActive =
+      currentPage === "default-themes" ||
+      currentPage === "custom-theme" ||
+      currentPage === "theme-type";
     html += `
-      <div class="sidebar-item ${currentPage === "default-themes" || currentPage === "custom-theme" || currentPage === "theme-type" ? "active" : ""}" onclick="goToPage('theme-type.html')" title="Change Theme">
+      <div class="sidebar-item ${isThemeActive ? "active" : ""}" onclick="goToPage('theme-type.html')" title="Change Theme">
         <div class="sidebar-icon-bg square">
           <img src="${themeIcon}" alt="Theme">
         </div>
-        <span>${themeName}</span>
+        ${!isThemeActive && themeLabel ? `<span class="sidebar-label">${themeLabel}</span>` : ""}
       </div>
     `;
   }
 
-  // Medical/Personalization indicator - rotated diamond
-  if (
-    appData.medicalConsiderations.length > 0 ||
-    appData.ageRange ||
-    appData.diversity
-  ) {
-    let medicalIcon;
-    let medicalLabel;
-
+  // 3. Personalization — show from personalization onward (diamond)
+  if (stepIndex >= 3) {
+    let medicalIcon = "images/girl1.png";
+    let medicalLabel = "";
     if (appData.medicalConsiderations.length > 1) {
       medicalIcon = "images/Multislect.png";
       medicalLabel = "Multiple";
     } else if (appData.medicalConsiderations.length === 1) {
-      const singleMedical = appData.medicalConsiderations[0];
-      medicalIcon = medicalIcons[singleMedical] || "images/girl1.png";
+      medicalIcon =
+        medicalIcons[appData.medicalConsiderations[0]] || "images/girl1.png";
       medicalLabel =
-        singleMedical.charAt(0).toUpperCase() + singleMedical.slice(1);
-    } else {
-      medicalIcon = "images/girl1.png";
-      medicalLabel = "Personal";
+        appData.medicalConsiderations[0].charAt(0).toUpperCase() +
+        appData.medicalConsiderations[0].slice(1);
     }
-
+    const isPersonalizationActive =
+      currentPage === "personalization" || currentPage === "personalization2";
     html += `
-      <div class="sidebar-item ${currentPage === "personalization" ? "active" : ""}" onclick="goToPage('personalization.html')" title="Edit Personalization">
+      <div class="sidebar-item ${isPersonalizationActive ? "active" : ""}" onclick="goToPage('personalization.html')" title="Edit Personalization">
         <div class="sidebar-icon-bg diamond">
           <img src="${medicalIcon}" alt="Personalization">
         </div>
-        <span>${medicalLabel}</span>
+        ${!isPersonalizationActive && medicalLabel ? `<span class="sidebar-label">${medicalLabel}</span>` : ""}
       </div>
     `;
   }
 
-  // Customization indicator - show what they selected
-  if (Object.keys(appData.customization).length > 0) {
-    let customIcon = "images/girl2.png";
-    let customLabel = "Custom";
+  // 4. Age/Gender personalization — show from personalization2 onward (diamond variant)
+  if (stepIndex >= 4) {
+    const ageLabel = appData.ageRange ? appData.ageRange : "";
+    html += `
+      <div class="sidebar-item ${currentPage === "personalization2" ? "active" : ""}" onclick="goToPage('personalization2.html')" title="Edit Age/Gender">
+        <div class="sidebar-icon-bg diamond">
+          <img src="images/girl1.png" alt="Age/Gender">
+        </div>
+        ${currentPage !== "personalization2" && ageLabel ? `<span class="sidebar-label">${ageLabel}</span>` : ""}
+      </div>
+    `;
+  }
 
-    // For coloring and hidden-objects, show the art style they selected
+  // 5. Customization — show from customization onward (pentagon)
+  if (stepIndex >= 5) {
+    let customIcon = "images/girl2.png";
+    let customLabel = "";
     if (appData.customization.artStyle) {
       const artStyleIcons = {
         "3d-rendering": "images/3drender.png",
@@ -340,35 +366,45 @@ function generateSidebar(currentPage) {
         realistic: "images/Realistic.png",
         drawing: "images/drawing.png",
       };
+      const artStyleLabels = {
+        "3d-rendering": "3D Rendering",
+        "comic-book": "Comic Book",
+        geometric: "Geometric",
+        anime: "Anime",
+        realistic: "Realistic",
+        drawing: "Drawing",
+      };
       customIcon = artStyleIcons[appData.customization.artStyle] || customIcon;
-      customLabel =
-        appData.customization.artStyle.charAt(0).toUpperCase() +
-        appData.customization.artStyle.slice(1).replace("-", " ");
+      customLabel = artStyleLabels[appData.customization.artStyle] || "";
     }
-    // For trivia, show game style
-    else if (appData.customization["game-style"]) {
-      customLabel = appData.customization["game-style"].replace("-", " ");
-      customLabel = customLabel.charAt(0).toUpperCase() + customLabel.slice(1);
-    }
-    // For story, show story style
-    else if (appData.customization["story-style"]) {
-      customLabel =
-        appData.customization["story-style"].charAt(0).toUpperCase() +
-        appData.customization["story-style"].slice(1);
-    }
-    // For activity-game, show location
-    else if (appData.customization["activity-location"]) {
-      customLabel =
-        appData.customization["activity-location"].charAt(0).toUpperCase() +
-        appData.customization["activity-location"].slice(1);
-    }
-
     html += `
       <div class="sidebar-item ${currentPage === "customization" ? "active" : ""}" onclick="goToPage('customization.html')" title="Edit Customization">
         <div class="sidebar-icon-bg pentagon">
           <img src="${customIcon}" alt="Customization">
         </div>
-        <span>${customLabel}</span>
+        ${currentPage !== "customization" && customLabel ? `<span class="sidebar-label">${customLabel}</span>` : ""}
+      </div>
+    `;
+  }
+
+  // 6. Review — show from review onward (square)
+  if (stepIndex >= 6) {
+    html += `
+      <div class="sidebar-item ${currentPage === "review" ? "active" : ""}" onclick="goToPage('review.html')" title="Review Selections">
+        <div class="sidebar-icon-bg square">
+          <img src="images/coloringpage.png" alt="Review">
+        </div>
+      </div>
+    `;
+  }
+
+  // 7. Final — show on final page only (rectangle)
+  if (stepIndex >= 7) {
+    html += `
+      <div class="sidebar-item ${currentPage === "final" ? "active" : ""}" onclick="goToPage('final.html')" title="Final Prompt">
+        <div class="sidebar-icon-bg rectangle">
+          <img src="${activity.icon}" alt="Final">
+        </div>
       </div>
     `;
   }
@@ -381,23 +417,26 @@ function generateSidebar(currentPage) {
 // ========================================
 // Page to step mapping
 const pageToStep = {
-  "theme-type": 0,
-  "default-themes": 1,
-  "custom-theme": 1,
-  personalization: 2,
-  customization: 3,
-  review: 4,
-  final: 5,
+  "activity-select": 0,
+  "theme-type": 1,
+  "default-themes": 2,
+  "custom-theme": 2,
+  personalization: 3,
+  personalization2: 3,
+  customization: 4,
+  review: 5,
+  final: 6,
 };
 
 // Runner images for each step
 const stepRunnerImages = {
   0: "images/girl1.png",
-  1: "images/girl2.png",
+  1: "images/girl1.png",
   2: "images/girl2.png",
   3: "images/girl2.png",
-  4: "images/girl3.png",
-  5: "images/girl4.png",
+  4: "images/girl2.png",
+  5: "images/girl3.png",
+  6: "images/girl4.png",
 };
 
 function generateBreadcrumb(currentPage) {
@@ -405,7 +444,7 @@ function generateBreadcrumb(currentPage) {
   if (!breadcrumbContainer) return;
 
   const currentStep = pageToStep[currentPage] ?? 0;
-  const totalSteps = 6;
+  const totalSteps = 7;
 
   // Determine which steps are completed based on app state
   const completedSteps = getCompletedSteps();
@@ -450,56 +489,64 @@ function generateBreadcrumb(currentPage) {
 function getCompletedSteps() {
   const completed = [];
 
-  // Step 0: Theme type selected
-  if (appData.themeType) {
+  // Step 0: Activity selected
+  if (appData.activityType) {
     completed.push(0);
   }
 
-  // Step 1: Theme selected
-  if (appData.theme || appData.customTheme) {
+  // Step 1: Theme type selected
+  if (appData.themeType) {
     completed.push(1);
   }
 
-  // Step 2: Personalization
+  // Step 2: Theme selected
+  if (appData.theme || appData.customTheme) {
+    completed.push(2);
+  }
+
+  // Step 3: Personalization
   if (
     appData.ageRange ||
     appData.diversity ||
     appData.medicalConsiderations.length > 0
   ) {
-    completed.push(2);
-  }
-
-  // Step 3: Customization
-  if (Object.keys(appData.customization).length > 0) {
     completed.push(3);
   }
 
-  // Step 4 & 5 are completed when visited
+  // Step 4: Customization
+  if (Object.keys(appData.customization).length > 0) {
+    completed.push(4);
+  }
+
+  // Steps 5 & 6 are completed when visited
   return completed;
 }
 
 function navigateToStep(step) {
   switch (step) {
     case 0:
-      goToPage("theme-type.html");
+      goToPage("activity-select.html");
       break;
     case 1:
+      goToPage("theme-type.html");
+      break;
+    case 2:
       if (appData.themeType === "custom") {
         goToPage("custom-theme.html");
       } else {
         goToPage("default-themes.html");
       }
       break;
-    case 2:
+    case 3:
       goToPage("personalization.html");
       break;
-    case 3:
+    case 4:
       goToPage("customization.html");
       break;
-    case 4:
+    case 5:
       goToPage("review.html");
       break;
-    case 5:
+    case 6:
       goToPage("final.html");
       break;
   }
@@ -514,7 +561,10 @@ function generatePrompt() {
 
   let prompt = template;
 
-  const themeToUse = appData.customTheme || formatTheme(appData.theme);
+  const baseTheme = appData.customTheme || formatTheme(appData.theme);
+  const themeToUse = appData.themeFocus
+    ? `${baseTheme} (focus: ${appData.themeFocus})`
+    : baseTheme;
   const nickname = appData.customization["child-nickname"] || "";
 
   // Conditional nickname content
@@ -524,6 +574,11 @@ function generatePrompt() {
     : "";
   const nicknameTextInstruction = nickname
     ? ` Add the optional text "Super ${nickname} Saves the Day!" on the page.`
+    : "";
+
+  const childDescription = appData.childDescription || "";
+  const childDescriptionLine = childDescription
+    ? `- Child Description: ${childDescription}\n`
     : "";
 
   const replacements = {
@@ -537,17 +592,11 @@ function generatePrompt() {
     "{NICKNAME_LINE}": nicknameLineText,
     "{NICKNAME_INSTRUCTION}": nicknameInstruction,
     "{NICKNAME_TEXT_INSTRUCTION}": nicknameTextInstruction,
-    "{GAME_STYLE}": appData.customization["game-style"] || "",
-    "{QUESTION_COUNT}": appData.customization["question-count"] || "",
-    "{STORY_COMPLEXITY}": appData.customization["story-complexity"] || "",
-    "{STORY_STYLE}": appData.customization["story-style"] || "",
-    "{STORY_SETTING}": appData.customization["story-setting"] || "",
-    "{STORY_GENRE}": appData.customization["story-genre"] || "",
-    "{WRITING_STYLE}": appData.customization["writing-style"] || "",
+    "{CHILD_DESCRIPTION_LINE}": childDescriptionLine,
     "{OBJECTS_TO_INCLUDE}": appData.customization["objects-include"] || "",
-    "{ACTIVITY_LOCATION}": appData.customization["activity-location"] || "",
-    "{NUM_PARTICIPANTS}": appData.customization["num-participants"] || "",
-    "{RESTRICTIONS}": appData.customization["restrictions"] || "",
+    "{WORD_COUNT}": appData.customization["word-count"] || "",
+    "{GRID_SIZE}": appData.customization["grid-size"] || "",
+    "{NUM_DIFFERENCES}": appData.customization["num-differences"] || "5",
   };
 
   for (const [key, value] of Object.entries(replacements)) {
@@ -637,208 +686,152 @@ function getCustomizationContent() {
   switch (activityType) {
     case "coloring":
       return getColoringCustomization();
-    case "trivia":
-      return getTriviaCustomization();
+    case "spot-the-difference":
+      return getSpotDiffCustomization();
     case "hidden-objects":
       return getHiddenObjectsCustomization();
-    case "story":
-      return getStoryCustomization();
-    case "activity-game":
-      return getActivityGameCustomization();
+    case "crossword":
+      return getCrosswordCustomization();
+    case "wordsearch":
+      return getWordsearchCustomization();
     default:
       return "<p>Please select an activity type first.</p>";
   }
 }
 
+function sel(val, match) {
+  return val === match ? "selected" : "";
+}
+
+function artStyleGrid(styles, autoAdvance = true) {
+  const labels = {
+    "3d-rendering": "3D Rendering",
+    "comic-book": "Comic Book",
+    geometric: "Geometric",
+    anime: "Anime",
+    realistic: "Realistic",
+    drawing: "Drawing",
+  };
+  const imgs = {
+    "3d-rendering": "images/3drender.png",
+    "comic-book": "images/ComicBook.png",
+    geometric: "images/geometric.png",
+    anime: "images/Anime.png",
+    realistic: "images/Realistic.png",
+    drawing: "images/drawing.png",
+  };
+  const autoAdvanceAttr = autoAdvance ? "true" : "false";
+  return styles
+    .map(
+      (s) =>
+        `<div class="art-style-item ${sel(appData.customization.artStyle, s)}" data-style="${s}" data-auto-advance="${autoAdvanceAttr}" style="cursor:pointer;">
+        <div class="art-style-pentagon" style="pointer-events: none;"><img src="${imgs[s]}" alt="${labels[s]}" style="pointer-events: none;"></div>
+        <span class="art-style-label" style="pointer-events: none;">${labels[s]}</span>
+      </div>`,
+    )
+    .join("");
+}
+
 function getColoringCustomization() {
+  const styles = [
+    "drawing",
+    "anime",
+    "3d-rendering",
+    "geometric",
+    "comic-book",
+    "realistic",
+  ];
   return `
     <div class="art-style-grid">
-      <div class="art-style-item ${appData.customization.artStyle === "3d-rendering" ? "selected" : ""}" data-style="3d-rendering" onclick="selectArtStyle('3d-rendering')">
-        <div class="art-style-box">
-          <img src="images/3drender.png" alt="3D Rendering">
-        </div>
-        <span class="art-style-label">3D Rendering</span>
-      </div>
-      <div class="art-style-item ${appData.customization.artStyle === "comic-book" ? "selected" : ""}" data-style="comic-book" onclick="selectArtStyle('comic-book')">
-        <div class="art-style-box">
-          <img src="images/ComicBook.png" alt="Comic Book">
-        </div>
-        <span class="art-style-label">Comic Book</span>
-      </div>
-      <div class="art-style-item ${appData.customization.artStyle === "geometric" ? "selected" : ""}" data-style="geometric" onclick="selectArtStyle('geometric')">
-        <div class="art-style-box">
-          <img src="images/geometric.png" alt="Geometric">
-        </div>
-        <span class="art-style-label">Geometric</span>
-      </div>
-      <div class="art-style-item ${appData.customization.artStyle === "anime" ? "selected" : ""}" data-style="anime" onclick="selectArtStyle('anime')">
-        <div class="art-style-box">
-          <img src="images/Anime.png" alt="Anime">
-        </div>
-        <span class="art-style-label">Anime</span>
-      </div>
-      <div class="art-style-item ${appData.customization.artStyle === "realistic" ? "selected" : ""}" data-style="realistic" onclick="selectArtStyle('realistic')">
-        <div class="art-style-box">
-          <img src="images/Realistic.png" alt="Realistic">
-        </div>
-        <span class="art-style-label">Realistic</span>
-      </div>
-      <div class="art-style-item ${appData.customization.artStyle === "drawing" ? "selected" : ""}" data-style="drawing" onclick="selectArtStyle('drawing')">
-        <div class="art-style-box">
-          <img src="images/drawing.png" alt="Drawing">
-        </div>
-        <span class="art-style-label">Drawing</span>
-      </div>
-    </div>
-    <div class="form-actions right">
-      <button class="btn btn-primary" onclick="saveCustomization()">Next</button>
+      ${artStyleGrid(styles)}
     </div>
   `;
 }
 
-function getTriviaCustomization() {
+function getSpotDiffCustomization() {
+  const styles = [
+    "drawing",
+    "anime",
+    "3d-rendering",
+    "geometric",
+    "comic-book",
+    "realistic",
+  ];
+  const objectsVal = appData.customization["objects-include"] || "";
+  const ndVal = appData.customization["num-differences"] || "";
   return `
-    <div class="dropdowns-grid">
-      <div class="form-group">
-        <label>Game Style <i class="fa-solid fa-circle-info info-tooltip"></i></label>
-        <select id="game-style">
-          <option value="">Select...</option>
-          <option value="multiple-choice" ${appData.customization["game-style"] === "multiple-choice" ? "selected" : ""}>Multiple Choice</option>
-          <option value="true-false" ${appData.customization["game-style"] === "true-false" ? "selected" : ""}>True/False</option>
-          <option value="fill-blank" ${appData.customization["game-style"] === "fill-blank" ? "selected" : ""}>Fill in the Blank</option>
-        </select>
+    <div class="art-style-grid">
+      ${artStyleGrid(styles, false)}
+    </div>
+    <div style="display: flex; gap: 24px; margin-top: 24px;">
+      <div class="form-group" style="flex: 1;">
+        <label>Objects to Include</label>
+        <span class="hint">Input any specific objects you want to be included</span>
+        <input type="text" id="objects-include" placeholder="" value="${objectsVal}">
       </div>
-      <div class="form-group">
-        <label>Question Count <i class="fa-solid fa-circle-info info-tooltip"></i></label>
-        <select id="question-count">
-          <option value="">Select...</option>
-          <option value="5" ${appData.customization["question-count"] === "5" ? "selected" : ""}>5 Questions</option>
-          <option value="10" ${appData.customization["question-count"] === "10" ? "selected" : ""}>10 Questions</option>
-          <option value="15" ${appData.customization["question-count"] === "15" ? "selected" : ""}>15 Questions</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Story Complexity <i class="fa-solid fa-circle-info info-tooltip"></i></label>
-        <select id="story-complexity">
-          <option value="">Select...</option>
-          <option value="easy" ${appData.customization["story-complexity"] === "easy" ? "selected" : ""}>Easy</option>
-          <option value="medium" ${appData.customization["story-complexity"] === "medium" ? "selected" : ""}>Medium</option>
-          <option value="hard" ${appData.customization["story-complexity"] === "hard" ? "selected" : ""}>Hard</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Child's Nickname <i class="fa-solid fa-circle-info info-tooltip"></i></label>
-        <input type="text" id="child-nickname" placeholder="" value="${appData.customization["child-nickname"] || ""}">
+      <div class="form-group" style="flex: 1;">
+        <label>Number of Differences</label>
+        <span class="hint">Input the number of differences between the two images</span>
+        <input type="text" id="num-differences" placeholder="" value="${ndVal}">
       </div>
     </div>
-    <div class="form-actions right">
-      <button class="btn btn-primary" onclick="saveCustomization()">Next</button>
+    <div style="display: flex; justify-content: flex-end; margin-top: 16px;">
+      <button class="btn btn-primary" onclick="saveCustomization()" style="color: #000000;">Next</button>
     </div>
   `;
 }
 
 function getHiddenObjectsCustomization() {
+  const styles = [
+    "drawing",
+    "anime",
+    "3d-rendering",
+    "geometric",
+    "comic-book",
+    "realistic",
+  ];
+  const objectsVal = appData.customization["objects-include"] || "";
   return `
     <div class="art-style-grid">
-      <div class="art-style-item ${appData.customization.artStyle === "3d-rendering" ? "selected" : ""}" data-style="3d-rendering" onclick="selectArtStyle('3d-rendering')">
-        <div class="art-style-box">
-          <img src="images/3drender.png" alt="3D Rendering">
-        </div>
-        <span class="art-style-label">3D Rendering</span>
-      </div>
-      <div class="art-style-item ${appData.customization.artStyle === "comic-book" ? "selected" : ""}" data-style="comic-book" onclick="selectArtStyle('comic-book')">
-        <div class="art-style-box">
-          <img src="images/ComicBook.png" alt="Comic Book">
-        </div>
-        <span class="art-style-label">Comic Book</span>
-      </div>
-      <div class="art-style-item ${appData.customization.artStyle === "geometric" ? "selected" : ""}" data-style="geometric" onclick="selectArtStyle('geometric')">
-        <div class="art-style-box">
-          <img src="images/geometric.png" alt="Geometric">
-        </div>
-        <span class="art-style-label">Geometric</span>
-      </div>
-      <div class="art-style-item ${appData.customization.artStyle === "anime" ? "selected" : ""}" data-style="anime" onclick="selectArtStyle('anime')">
-        <div class="art-style-box">
-          <img src="images/Anime.png" alt="Anime">
-        </div>
-        <span class="art-style-label">Anime</span>
-      </div>
-      <div class="art-style-item ${appData.customization.artStyle === "realistic" ? "selected" : ""}" data-style="realistic" onclick="selectArtStyle('realistic')">
-        <div class="art-style-box">
-          <img src="images/Realistic.png" alt="Realistic">
-        </div>
-        <span class="art-style-label">Realistic</span>
-      </div>
-      <div class="art-style-item ${appData.customization.artStyle === "drawing" ? "selected" : ""}" data-style="drawing" onclick="selectArtStyle('drawing')">
-        <div class="art-style-box">
-          <img src="images/drawing.png" alt="Drawing">
-        </div>
-        <span class="art-style-label">Drawing</span>
-      </div>
+      ${artStyleGrid(styles, false)}
     </div>
-    <div class="form-group">
-      <label>Objects to Include <i class="fa-solid fa-circle-info info-tooltip"></i></label>
-      <input type="text" id="objects-include" placeholder="Enter any specific objects you want to be included" value="${appData.customization["objects-include"] || ""}">
+    <div class="form-group" style="margin-top: 24px;">
+      <label>Objects to Include</label>
+      <input type="text" id="objects-include" placeholder="Enter any specific objects" value="${objectsVal}">
     </div>
-    <div class="form-actions right">
-      <button class="btn btn-primary" onclick="saveCustomization()">Next</button>
+    <div style="display: flex; justify-content: flex-end; margin-top: 16px;">
+      <button class="btn btn-primary" onclick="saveCustomization()" style="color: #000000;">Next</button>
     </div>
   `;
 }
 
-function getStoryCustomization() {
+function getCrosswordCustomization() {
+  const diff = appData.customization["difficulty"] || "";
+  const wc = appData.customization["word-count"] || "";
+  const nick = appData.customization["child-nickname"] || "";
   return `
     <div class="dropdowns-grid">
       <div class="form-group">
-        <label>Story Style <i class="fa-solid fa-circle-info info-tooltip"></i></label>
-        <select id="story-style">
+        <label>Difficulty <i class="fa-solid fa-circle-info info-tooltip"></i></label>
+        <select id="difficulty">
           <option value="">Select...</option>
-          <option value="adventure" ${appData.customization["story-style"] === "adventure" ? "selected" : ""}>Adventure</option>
-          <option value="fantasy" ${appData.customization["story-style"] === "fantasy" ? "selected" : ""}>Fantasy</option>
-          <option value="educational" ${appData.customization["story-style"] === "educational" ? "selected" : ""}>Educational</option>
+          <option value="easy" ${sel(diff, "easy")}>Easy</option>
+          <option value="medium" ${sel(diff, "medium")}>Medium</option>
+          <option value="hard" ${sel(diff, "hard")}>Hard</option>
         </select>
       </div>
       <div class="form-group">
-        <label>Story Setting <i class="fa-solid fa-circle-info info-tooltip"></i></label>
-        <select id="story-setting">
+        <label>Word Count <i class="fa-solid fa-circle-info info-tooltip"></i></label>
+        <select id="word-count">
           <option value="">Select...</option>
-          <option value="forest" ${appData.customization["story-setting"] === "forest" ? "selected" : ""}>Forest</option>
-          <option value="city" ${appData.customization["story-setting"] === "city" ? "selected" : ""}>City</option>
-          <option value="space" ${appData.customization["story-setting"] === "space" ? "selected" : ""}>Space</option>
-          <option value="ocean" ${appData.customization["story-setting"] === "ocean" ? "selected" : ""}>Ocean</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Story Genre <i class="fa-solid fa-circle-info info-tooltip"></i></label>
-        <select id="story-genre">
-          <option value="">Select...</option>
-          <option value="comedy" ${appData.customization["story-genre"] === "comedy" ? "selected" : ""}>Comedy</option>
-          <option value="mystery" ${appData.customization["story-genre"] === "mystery" ? "selected" : ""}>Mystery</option>
-          <option value="action" ${appData.customization["story-genre"] === "action" ? "selected" : ""}>Action</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Story Complexity <i class="fa-solid fa-circle-info info-tooltip"></i></label>
-        <select id="story-complexity">
-          <option value="">Select...</option>
-          <option value="simple" ${appData.customization["story-complexity"] === "simple" ? "selected" : ""}>Simple</option>
-          <option value="medium" ${appData.customization["story-complexity"] === "medium" ? "selected" : ""}>Medium</option>
-          <option value="complex" ${appData.customization["story-complexity"] === "complex" ? "selected" : ""}>Complex</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Writing Style <i class="fa-solid fa-circle-info info-tooltip"></i></label>
-        <select id="writing-style">
-          <option value="">Select...</option>
-          <option value="playful" ${appData.customization["writing-style"] === "playful" ? "selected" : ""}>Playful</option>
-          <option value="descriptive" ${appData.customization["writing-style"] === "descriptive" ? "selected" : ""}>Descriptive</option>
-          <option value="simple" ${appData.customization["writing-style"] === "simple" ? "selected" : ""}>Simple</option>
+          <option value="10" ${sel(wc, "10")}>10 Words</option>
+          <option value="15" ${sel(wc, "15")}>15 Words</option>
+          <option value="20" ${sel(wc, "20")}>20 Words</option>
         </select>
       </div>
       <div class="form-group">
         <label>Child's Nickname <i class="fa-solid fa-circle-info info-tooltip"></i></label>
-        <input type="text" id="child-nickname" placeholder="" value="${appData.customization["child-nickname"] || ""}">
+        <input type="text" id="child-nickname" placeholder="" value="${nick}">
       </div>
     </div>
     <div class="form-actions right">
@@ -847,22 +840,34 @@ function getStoryCustomization() {
   `;
 }
 
-function getActivityGameCustomization() {
+function getWordsearchCustomization() {
+  const diff = appData.customization["difficulty"] || "";
+  const gs = appData.customization["grid-size"] || "";
+  const nick = appData.customization["child-nickname"] || "";
   return `
-    <div class="form-group">
-      <label>Activity Location</label>
-      <span class="hint">Example: bedroom, floor, wheelchair, etc.</span>
-      <input type="text" id="activity-location" placeholder="" value="${appData.customization["activity-location"] || ""}">
-    </div>
-    <div class="form-group">
-      <label>Number of Participants</label>
-      <span class="hint">The number of individuals participating in the activity</span>
-      <input type="text" id="num-participants" placeholder="" value="${appData.customization["num-participants"] || ""}">
-    </div>
-    <div class="form-group">
-      <label>Specific Restrictions</label>
-      <span class="hint">Example: low mobility, limited dexterity, bed rest, etc.</span>
-      <input type="text" id="restrictions" placeholder="" value="${appData.customization["restrictions"] || ""}">
+    <div class="dropdowns-grid">
+      <div class="form-group">
+        <label>Difficulty <i class="fa-solid fa-circle-info info-tooltip"></i></label>
+        <select id="difficulty">
+          <option value="">Select...</option>
+          <option value="easy" ${sel(diff, "easy")}>Easy</option>
+          <option value="medium" ${sel(diff, "medium")}>Medium</option>
+          <option value="hard" ${sel(diff, "hard")}>Hard</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Grid Size <i class="fa-solid fa-circle-info info-tooltip"></i></label>
+        <select id="grid-size">
+          <option value="">Select...</option>
+          <option value="small" ${sel(gs, "small")}>Small (10x10)</option>
+          <option value="medium" ${sel(gs, "medium")}>Medium (15x15)</option>
+          <option value="large" ${sel(gs, "large")}>Large (20x20)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Child's Nickname <i class="fa-solid fa-circle-info info-tooltip"></i></label>
+        <input type="text" id="child-nickname" placeholder="" value="${nick}">
+      </div>
     </div>
     <div class="form-actions right">
       <button class="btn btn-primary" onclick="saveCustomization()">Next</button>
@@ -885,6 +890,26 @@ function selectArtStyle(style) {
   }
 }
 
+function selectArtStyleAndAdvance(style) {
+  appData.customization.artStyle = style;
+  saveAppData(appData);
+
+  document.querySelectorAll(".art-style-item").forEach((item) => {
+    item.classList.remove("selected");
+  });
+  const selectedItem = document.querySelector(
+    `.art-style-item[data-style="${style}"]`,
+  );
+  if (selectedItem) {
+    selectedItem.classList.add("selected");
+  }
+
+  // Auto-advance to review after short delay
+  setTimeout(() => {
+    goToPage("review.html");
+  }, 300);
+}
+
 function saveCustomization() {
   // Gather all customization data
   const inputs = document.querySelectorAll(
@@ -898,4 +923,107 @@ function saveCustomization() {
 
   saveAppData(appData);
   goToPage("review.html");
+}
+
+// ========================================
+// Quick Create State Management
+// ========================================
+function loadQCData() {
+  const stored = localStorage.getItem("playwardQCData");
+  if (stored) {
+    try {
+      return JSON.parse(stored);
+    } catch (e) {}
+  }
+  return { activity: "", theme: "" };
+}
+
+function saveQCData() {
+  localStorage.setItem("playwardQCData", JSON.stringify(qcData));
+}
+
+let qcData = loadQCData();
+
+// QC activity config — 3 activities only
+const qcActivityConfig = {
+  coloring: { name: "Coloring Page", icon: "images/coloringpage.png" },
+  "spot-the-difference": {
+    name: "Spot the Differences",
+    icon: "images/spotdiff.png",
+  },
+  "hidden-objects": { name: "Hidden Objects", icon: "images/hiddenobject.png" },
+};
+
+// QC theme config — icons match default-themes
+const qcThemeConfig = {
+  superheroes: { name: "Superheroes", icon: "images/superhero.png" },
+  animals: { name: "Animals", icon: "images/animal.png" },
+  sports: { name: "Sports", icon: "images/sport.png" },
+  space: { name: "Space", icon: "images/space.png" },
+  ocean: { name: "Ocean", icon: "images/ocean.png" },
+  nature: { name: "Nature", icon: "images/nature.png" },
+};
+
+// Generate QC sidebar — step 1 shows activity icon, step 2 shows activity + theme
+function generateQCSidebar(step) {
+  const container = document.getElementById("dynamic-sidebar");
+  if (!container) return;
+
+  let html = "";
+
+  const activity = qcActivityConfig[qcData.activity];
+  if (activity) {
+    html += `
+      <div class="sidebar-item active">
+        <div class="sidebar-icon-bg rectangle">
+          <img src="${activity.icon}" alt="${activity.name}">
+        </div>
+        <span class="sidebar-label">${activity.name}</span>
+      </div>
+    `;
+  }
+
+  if (step >= 2 && qcData.theme) {
+    const theme = qcThemeConfig[qcData.theme];
+    if (theme) {
+      html += `
+        <div class="sidebar-item" onclick="goToPage('qc-theme.html')" title="Change Theme">
+          <div class="sidebar-icon-bg square">
+            <img src="${theme.icon}" alt="${theme.name}">
+          </div>
+          <span class="sidebar-label">${theme.name}</span>
+        </div>
+      `;
+    }
+  }
+
+  container.innerHTML = html;
+}
+
+// Generate QC breadcrumb — 2 dots with girl3/girl4 runner
+function generateQCBreadcrumb(currentStep) {
+  const container = document.getElementById("progress-breadcrumb");
+  if (!container) return;
+
+  const runnerImg = currentStep === 1 ? "images/girl3.png" : "images/girl4.png";
+  // 2 dots: step 1 = dot index 0 = 0%, step 2 = dot index 1 = 100%
+  const runnerPercent = currentStep === 1 ? 0 : 100;
+  const fillWidth = currentStep === 2 ? "calc(100% - 40px)" : "0px";
+
+  const dots = [1, 2]
+    .map(
+      (i) => `
+    <div class="progress-dot ${i < currentStep ? "completed" : ""} ${i === currentStep ? "active" : ""}"></div>
+  `,
+    )
+    .join("");
+
+  container.innerHTML = `
+    <div class="progress-track">
+      <div class="progress-line"></div>
+      <div class="progress-line-fill" style="width: ${fillWidth};"></div>
+      <div class="progress-dots">${dots}</div>
+      <img src="${runnerImg}" alt="Runner" class="progress-runner" style="left: calc(${runnerPercent}% + 0px);">
+    </div>
+  `;
 }

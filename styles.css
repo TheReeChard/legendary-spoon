@@ -1,14 +1,19 @@
 /* ========================================
+   Inter Font Import
+======================================== */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+/* ========================================
    CSS Variables & Reset
 ======================================== */
 :root {
-  --color-primary: #0d9488;
-  --color-primary-hover: #0f766e;
-  --color-primary-light: #f0fdfa;
-  --color-dark: #2c3e50;
-  --color-text: #1a1a1a;
-  --color-text-secondary: #555;
-  --color-text-muted: #666;
+  --color-primary: #5aa9e6;
+  --color-primary-hover: #3d8fd4;
+  --color-primary-light: #e8f4fd;
+  --color-dark: #1a405d;
+  --color-text: #000000;
+  --color-text-secondary: #000000;
+  --color-text-muted: #000000;
   --color-border: #ddd;
   --color-white: #ffffff;
   --color-circle-bg: #e8e8e8;
@@ -17,10 +22,10 @@
   --footer-height: 80px;
   --sidebar-width: 120px;
 
-  --font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  --font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   --border-radius: 12px;
   --border-radius-full: 50%;
-  --border-radius-pill: 25px;
+  --border-radius-pill: 15px;
 
   --transition-fast: 0.2s ease;
   --transition-normal: 0.3s ease;
@@ -44,17 +49,18 @@ body {
    Header
 ======================================== */
 .header {
-  position: fixed;
-  top: 0;
+  position: relative;
+  top: 30px;
   left: 0;
   right: 0;
   height: var(--header-height);
   background: var(--color-dark);
   padding: 0 30px;
-  display: none; /* Hidden by default, shown via JS */
+  display: none;
   justify-content: space-between;
   align-items: center;
   z-index: 100;
+  overflow: visible;
 }
 
 .header.visible {
@@ -68,9 +74,12 @@ body {
 }
 
 .header-logo-img {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  position: relative;
+  top: -25px;
+  margin-bottom: -25px;
 }
 
 .logo-text {
@@ -107,7 +116,7 @@ body {
 }
 
 .main-content.with-header {
-  padding-top: var(--header-height);
+  padding-top: 0;
 }
 
 /* ========================================
@@ -131,7 +140,7 @@ body {
 }
 
 .main-content.with-header .page-wrapper {
-  min-height: calc(100vh - var(--header-height));
+  min-height: calc(100vh - var(--header-height) - 30px);
 }
 
 /* Page Content */
@@ -144,20 +153,70 @@ body {
 }
 
 /* ========================================
-   Progress Breadcrumb (Bottom Runner)
+   Footer / Breadcrumb Strip
+   .breadcrumb-with-back = the full grass strip
+   Buttons are direct children, absolutely positioned
+   #progress-breadcrumb = dots/runner, fills the strip
 ======================================== */
-.progress-breadcrumb {
+
+.breadcrumb-with-back {
   position: relative;
   width: 100%;
-  height: 100px;
+  height: 140px;
   background: url("images/grass.png") no-repeat;
   background-size: 100% 100%;
   background-position: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-bottom: 10px;
   margin-top: auto;
+  flex-shrink: 0;
+}
+
+/* Back button — top-left of grass strip */
+.btn-back {
+  position: absolute;
+  left: 20px;
+  top: 22px;
+  z-index: 30;
+  padding: 8px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 15px;
+  background: var(--color-white);
+  border: 2px solid #ccc;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.btn-back:hover {
+  background: #f5f5f5;
+  border-color: #bbb;
+}
+
+/* Right-side actions — top-right of grass strip */
+.breadcrumb-right-actions {
+  position: absolute;
+  right: 20px;
+  top: 22px;
+  z-index: 30;
+  display: flex;
+  gap: 12px;
+}
+
+/* Dots/runner container — fills the strip, handles alignment */
+.progress-breadcrumb {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 50px;
+  pointer-events: none; /* buttons above stay clickable */
+}
+
+.progress-breadcrumb * {
+  pointer-events: auto;
 }
 
 .progress-track {
@@ -223,6 +282,7 @@ body {
 }
 
 .progress-dot.active {
+  background: var(--color-primary);
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.3);
 }
@@ -238,12 +298,12 @@ body {
 
 .progress-runner {
   position: absolute;
-  bottom: 5px;
+  bottom: 30px; /* sits above the dots which are at the bottom */
   width: 60px;
   height: 60px;
   object-fit: contain;
   transition: left 0.4s ease;
-  z-index: 10;
+  z-index: 20;
   transform: translateX(-50%);
 }
 
@@ -357,35 +417,53 @@ body {
   line-height: 1.2;
 }
 
+.sidebar-label {
+  font-size: 10px;
+  color: #555;
+  text-align: center;
+  line-height: 1.2;
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
 /* ========================================
    Typography
 ======================================== */
 .page-title {
-  font-size: 28px;
+  font-size: 44px;
   font-weight: 700;
   color: var(--color-text);
   margin-bottom: 10px;
+  font-family: "Inter", sans-serif;
 }
 
 .page-title-large {
-  font-size: 32px;
+  font-size: 44px;
   font-weight: 700;
   color: var(--color-text);
   margin-bottom: 15px;
+  font-family: "Inter", sans-serif;
 }
 
 .page-subtitle {
-  font-size: 14px;
-  color: var(--color-text-secondary);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--color-text);
   line-height: 1.6;
   margin-bottom: 30px;
+  font-family: "Inter", sans-serif;
 }
 
 .page-subtitle-small {
-  font-size: 13px;
-  color: var(--color-text-muted);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--color-text);
   line-height: 1.5;
   margin-bottom: 30px;
+  font-family: "Inter", sans-serif;
 }
 
 /* ========================================
@@ -563,8 +641,9 @@ body {
   justify-content: center;
   font-size: 56px;
   font-weight: 700;
-  color: #888;
+  color: #1a405d;
   flex-shrink: 0;
+  font-family: "Inter", sans-serif;
 }
 
 .step-content {
@@ -711,9 +790,9 @@ body {
 .theme-grid-new {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 35px;
-  max-width: 550px;
-  margin: 50px auto;
+  gap: 25px;
+  max-width: 560px;
+  margin: 30px 0;
 }
 
 .theme-item {
@@ -726,11 +805,32 @@ body {
   transform: translateY(-3px);
 }
 
-.theme-item.selected .theme-circle {
+.theme-item.selected .theme-box {
   border-color: var(--color-primary);
   background: var(--color-primary-light);
 }
 
+/* Rounded square box — matches Figma */
+.theme-box {
+  width: 130px;
+  height: 130px;
+  background: var(--color-circle-bg);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px;
+  border: 3px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.theme-box img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+}
+
+/* Keep old .theme-circle for any pages still using it */
 .theme-circle {
   width: 90px;
   height: 90px;
@@ -832,7 +932,7 @@ body {
   font-size: 16px;
   font-weight: 500;
   color: var(--color-text);
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -845,10 +945,11 @@ body {
 }
 
 .medical-grid-new {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 25px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px 40px;
   margin-bottom: 35px;
+  max-width: 480px;
 }
 
 .medical-item {
@@ -861,11 +962,34 @@ body {
   transform: translateY(-2px);
 }
 
-.medical-item.selected .medical-circle {
+.medical-item.selected .medical-diamond {
   border-color: var(--color-primary);
   background: var(--color-primary-light);
 }
 
+/* Diamond shape — rotated square */
+.medical-diamond {
+  width: 80px;
+  height: 80px;
+  background: var(--color-circle-bg);
+  border-radius: 16px;
+  transform: rotate(45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+  border: 3px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.medical-diamond img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  transform: rotate(-45deg);
+}
+
+/* Keep old .medical-circle for backward compat */
 .medical-circle {
   width: 70px;
   height: 70px;
@@ -943,9 +1067,18 @@ body {
   transform: translateY(-3px);
 }
 
-.art-style-item.selected .art-style-circle {
-  border-color: var(--color-primary);
-  background: var(--color-primary-light);
+.art-style-item.selected .art-style-pentagon {
+  box-shadow: none;
+}
+
+.art-style-item.selected .art-style-label {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.art-style-item.selected {
+  border-bottom: 3px solid var(--color-primary);
+  padding-bottom: 4px;
 }
 
 .art-style-item.selected .art-style-box {
@@ -972,10 +1105,27 @@ body {
   object-fit: contain;
 }
 
+/* Pentagon shape for art style images */
+.art-style-pentagon {
+  width: 140px;
+  height: 140px;
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+  overflow: hidden;
+  margin: 0 auto 10px;
+  transition: outline 0.15s ease;
+}
+
+.art-style-pentagon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 .art-style-box {
   width: 100%;
   aspect-ratio: 1;
-  background: #f5f5f5;
+  background: transparent;
   border-radius: var(--border-radius);
   display: flex;
   align-items: center;
@@ -987,14 +1137,114 @@ body {
 }
 
 .art-style-box img {
-  width: 80%;
-  height: 80%;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--border-radius);
 }
 
 .art-style-label {
   font-size: 13px;
   color: var(--color-text);
+}
+
+/* ========================================
+   Age Cards (Personalization Page 2)
+======================================== */
+.age-section {
+  margin-bottom: 30px;
+}
+
+.age-section h3 {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.age-cards-row {
+  display: flex;
+  gap: 20px;
+}
+
+.age-card {
+  width: 110px;
+  background: var(--color-circle-bg);
+  border-radius: 12px;
+  border: 3px solid transparent;
+  padding: 12px 10px 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.age-card:hover {
+  transform: translateY(-2px);
+}
+
+.age-card.selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.age-card img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  margin-bottom: 8px;
+}
+
+.age-card span {
+  font-size: 13px;
+  color: var(--color-text);
+  font-weight: 500;
+  line-height: 1.4;
+  text-align: center;
+  white-space: normal;
+}
+
+/* Gender + Child Description row */
+.gender-description-row {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  margin-top: 10px;
+}
+
+.gender-description-row .form-group {
+  flex: 1;
+  max-width: 280px;
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.select-wrapper select {
+  width: 160px;
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--color-white);
+  border: 1.5px solid #ccc;
+  border-radius: 8px;
+  padding: 8px 32px 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}
+
+.input-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.input-with-icon input {
+  flex: 1;
 }
 
 /* ========================================
@@ -1044,7 +1294,7 @@ body {
 }
 
 #review-summary strong {
-  color: var(--color-primary);
+  color: #000000;
 }
 
 .review-actions {

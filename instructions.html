@@ -108,8 +108,9 @@
     <script src="shared.js"></script>
     <script>
       function quickCreate() {
-        // Set some defaults and go to activity selection
-        goToPage("activity-select.html");
+        // Reset QC data and go to quick create activity selection
+        localStorage.removeItem("playwardQCData");
+        goToPage("qc-select.html");
       }
     </script>
   </body>

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Desktop - Amuze Labs - Crossword</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .video-placeholder {
+        width: 370px;
+        height: 200px;
+        background: #d9d9d9;
+        border-radius: 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 30px auto 28px;
+        cursor: pointer;
+        gap: 10px;
+      }
+      .video-placeholder .play-icon {
+        width: 0;
+        height: 0;
+        border-top: 18px solid transparent;
+        border-bottom: 18px solid transparent;
+        border-left: 30px solid #333;
+      }
+      .video-placeholder span {
+        font-size: 13px;
+        color: #555;
+      }
+      .amuselabs-cta {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header visible" id="main-header">
+      <div
+        class="header-logo"
+        onclick="goToPage('index.html')"
+        style="cursor: pointer"
+      >
+        <img
+          src="images/logo.png"
+          alt="PlayWard Logo"
+          class="header-logo-img"
+        />
+        <span class="logo-text">PlayWard</span>
+      </div>
+      <nav class="header-nav">
+        <a href="about.html">About Us</a>
+        <span>|</span>
+        <a href="support.html">Support</a>
+      </nav>
+    </header>
+
+    <main class="main-content with-header">
+      <section class="page active">
+        <div class="page-wrapper">
+          <div class="page-content">
+            <h1 class="page-title">Generate a Crossword using AmuseLabs</h1>
+            <p class="page-subtitle">Instructions/Explanation here</p>
+
+            <div class="video-placeholder">
+              <div class="play-icon"></div>
+              <span>Video instructions</span>
+            </div>
+
+            <div class="amuselabs-cta">
+              <button
+                class="btn btn-primary"
+                onclick="
+                  window.open(
+                    'https://puzzleme.amuselabs.com/pmm/crossword-create',
+                    '_blank',
+                  )
+                "
+              >
+                Go to Amuse Labs
+              </button>
+            </div>
+          </div>
+
+          <div class="breadcrumb-with-back">
+            <button
+              class="btn btn-outline btn-back"
+              onclick="goToPage('activity-select.html')"
+            >
+              Back
+            </button>
+            <div class="progress-breadcrumb"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="shared.js"></script>
+  </body>
+</html>
