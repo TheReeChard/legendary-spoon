@@ -360,7 +360,7 @@ function generateSidebar(currentPage) {
     if (appData.customization.artStyle) {
       const artStyleIcons = {
         "3d-rendering": "images/3drender.png",
-        "comic-book": "images/ComicBook.png",
+        "comic-book": "images/comic-book.png",
         geometric: "images/geometric.png",
         anime: "images/Anime.png",
         realistic: "images/Realistic.png",
@@ -714,7 +714,7 @@ function artStyleGrid(styles, autoAdvance = true) {
   };
   const imgs = {
     "3d-rendering": "images/3drender.png",
-    "comic-book": "images/ComicBook.png",
+    "comic-book": "images/comic-book.png",
     geometric: "images/geometric.png",
     anime: "images/Anime.png",
     realistic: "images/Realistic.png",
