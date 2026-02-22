@@ -488,7 +488,7 @@ body {
    Landing Page
 ======================================== */
 
-/* In index.html, target it specifically via landing */
+/* In index.html, targets landing had to add later */
 .landing-content .btn-primary {
   background: #db6e3b;
   padding: 16px 130px;
