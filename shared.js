@@ -53,27 +53,27 @@ function resetAppData() {
 const activityConfig = {
   coloring: {
     name: "Coloring Page",
-    icon: "images/coloringpage.png",
+    icon: "images/coloringpage1.png",
     color: "#e8f5e9",
   },
   "spot-the-difference": {
     name: "Spot the Difference",
-    icon: "images/spotdiff.png",
+    icon: "images/spotdiff1.png",
     color: "#fff3e0",
   },
   "hidden-objects": {
     name: "Hidden Objects",
-    icon: "images/hiddenobject.png",
+    icon: "images/hiddenobject1.png",
     color: "#e3f2fd",
   },
   crossword: {
     name: "Crossword",
-    icon: "images/crossword.png",
+    icon: "images/crossword1.png",
     color: "#fce4ec",
   },
   wordsearch: {
     name: "Word Search",
-    icon: "images/wordsearch.png",
+    icon: "images/wordsearch1.png",
     color: "#f3e5f5",
   },
 };
@@ -282,8 +282,8 @@ function generateSidebar(currentPage) {
   const activityLabel = activity.name || "";
   html += `
     <div class="sidebar-item ${currentPage === "activity-select" ? "active" : ""}" onclick="goToPage('activity-select.html')" title="Change Activity">
-      <div class="sidebar-icon-bg rectangle">
-        <img src="${activity.icon}" alt="${activity.name}">
+      <div class="sidebar-icon-bg rectangle" style="background: none; border: none; box-shadow: none; width: 110px; height: 100px;">
+        <img src="${activity.icon}" alt="${activity.name}" style="width: 100px; height: 100px; object-fit: contain;">
       </div>
       ${currentPage !== "activity-select" ? `<span class="sidebar-label">${activityLabel}</span>` : ""}
     </div>
