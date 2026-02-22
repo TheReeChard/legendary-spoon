@@ -487,6 +487,17 @@ body {
 /* ========================================
    Landing Page
 ======================================== */
+
+/* In index.html, target it specifically via landing */
+.landing-content .btn-primary {
+  background: #db6e3b;
+  padding: 16px 130px;
+  font-size: 24px;
+}
+.landing-content .btn-primary:hover {
+  background: #c05e2e;
+}
+
 #page-landing {
   height: 100vh;
   display: flex;
