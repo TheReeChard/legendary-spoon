@@ -4,13 +4,53 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PlayWard - Select Activity</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
     <link rel="stylesheet" href="styles.css" />
+    <style>
+      .activity-grid-new {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 50px;
+        margin-top: 40px;
+        max-width: 640px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .activity-grid-new .activity-item {
+        flex: 0 0 auto;
+        width: 180px;
+      }
+      .activity-grid-new .activity-circle {
+        width: 160px;
+        height: 160px;
+        margin: 0 auto 12px;
+      }
+      .activity-grid-new .activity-circle img {
+        width: 90px;
+        height: 90px;
+      }
+      .activity-grid-new .activity-label {
+        font-size: 18px;
+        font-weight: 700;
+      }
+    </style>
   </head>
   <body>
     <header class="header visible" id="main-header">
-      <div class="header-logo" onclick="goToPage('index.html')" style="cursor: pointer">
-        <img src="images/logo.png" alt="PlayWard Logo" class="header-logo-img" />
+      <div
+        class="header-logo"
+        onclick="goToPage('index.html')"
+        style="cursor: pointer"
+      >
+        <img
+          src="images/logo.png"
+          alt="PlayWard Logo"
+          class="header-logo-img"
+        />
         <span class="logo-text">PlayWard</span>
       </div>
       <nav class="header-nav">
@@ -26,35 +66,57 @@
           <div class="page-content">
             <h1 class="page-title">Select a Prompt Category</h1>
             <p class="page-subtitle">
-              This is where you select the type of activity for which to generate a prompt for! Simply select one of the icons below to choose the activity type and move onto the next page.
+              This is where you select the type of activity for which to
+              generate a prompt for! Simply select one of the icons below to
+              choose the activity type and move onto the next page.
             </p>
 
             <div class="activity-grid-new">
-              <div class="activity-item" data-activity="coloring" onclick="selectActivity('coloring')">
+              <div
+                class="activity-item"
+                data-activity="coloring"
+                onclick="selectActivity('coloring')"
+              >
                 <div class="activity-circle">
                   <img src="images/coloringpage.png" alt="Coloring Page" />
                 </div>
                 <span class="activity-label">Coloring Page</span>
               </div>
-              <div class="activity-item" data-activity="spot-the-difference" onclick="selectActivity('spot-the-difference')">
+              <div
+                class="activity-item"
+                data-activity="spot-the-difference"
+                onclick="selectActivity('spot-the-difference')"
+              >
                 <div class="activity-circle">
                   <img src="images/spotdiff.png" alt="Spot the Difference" />
                 </div>
-                <span class="activity-label">Spot the Difference</span>
+                <span class="activity-label">Spot the Differences</span>
               </div>
-              <div class="activity-item" data-activity="hidden-objects" onclick="selectActivity('hidden-objects')">
+              <div
+                class="activity-item"
+                data-activity="hidden-objects"
+                onclick="selectActivity('hidden-objects')"
+              >
                 <div class="activity-circle">
                   <img src="images/hiddenobject.png" alt="Hidden Objects" />
                 </div>
                 <span class="activity-label">Hidden Objects</span>
               </div>
-              <div class="activity-item" data-activity="crossword" onclick="selectActivity('crossword')">
+              <div
+                class="activity-item"
+                data-activity="crossword"
+                onclick="selectActivity('crossword')"
+              >
                 <div class="activity-circle">
                   <img src="images/crossword.png" alt="Crossword" />
                 </div>
                 <span class="activity-label">Crossword</span>
               </div>
-              <div class="activity-item" data-activity="wordsearch" onclick="selectActivity('wordsearch')">
+              <div
+                class="activity-item"
+                data-activity="wordsearch"
+                onclick="selectActivity('wordsearch')"
+              >
                 <div class="activity-circle">
                   <img src="images/wordsearch.png" alt="Word Search" />
                 </div>
@@ -73,14 +135,20 @@
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         if (appData.activityType) {
-          const selected = document.querySelector(`.activity-item[data-activity="${appData.activityType}"]`);
+          const selected = document.querySelector(
+            `.activity-item[data-activity="${appData.activityType}"]`,
+          );
           if (selected) selected.classList.add("selected");
         }
       });
 
       function selectActivity(activity) {
-        document.querySelectorAll(".activity-item").forEach(item => item.classList.remove("selected"));
-        const selectedItem = document.querySelector(`.activity-item[data-activity="${activity}"]`);
+        document
+          .querySelectorAll(".activity-item")
+          .forEach((item) => item.classList.remove("selected"));
+        const selectedItem = document.querySelector(
+          `.activity-item[data-activity="${activity}"]`,
+        );
         if (selectedItem) selectedItem.classList.add("selected");
         appData.activityType = activity;
         saveAppData(appData);
