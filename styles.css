@@ -328,6 +328,15 @@ body {
 .page-main {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.page-main h1,
+.page-main p,
+.page-main > * {
+  width: 100%;
 }
 
 /* Sidebar Items */
@@ -1076,14 +1085,19 @@ body {
    Art Style Grid
 ======================================== */
 .art-style-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 25px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
   margin-bottom: 30px;
-  max-width: 600px;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .art-style-item {
+  flex: 0 0 auto;
+  width: 160px;
   text-align: center;
   cursor: pointer;
   transition: transform var(--transition-fast);
@@ -1170,7 +1184,8 @@ body {
 }
 
 .art-style-label {
-  font-size: 13px;
+  font-size: 18px;
+  font-weight: 700;
   color: var(--color-text);
 }
 
