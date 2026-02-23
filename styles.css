@@ -83,7 +83,7 @@ body {
 }
 
 .logo-text {
-  font-size: 32px;
+  font-size: 44px;
   font-weight: 700;
   color: var(--color-white);
 }
@@ -97,6 +97,7 @@ body {
 .header-nav a {
   color: var(--color-white);
   text-decoration: none;
+  font-weight: 700;
 }
 
 .header-nav a:hover {
