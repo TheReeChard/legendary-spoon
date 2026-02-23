@@ -493,9 +493,11 @@ body {
   background: #db6e3b;
   padding: 16px 130px;
   font-size: 24px;
+  color: #ffffff;
 }
 .landing-content .btn-primary:hover {
   background: #c05e2e;
+  color: #ffffff;
 }
 
 #page-landing {
@@ -559,7 +561,8 @@ body {
   border: none;
   border-radius: var(--border-radius-pill);
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 700;
+  color: #000000;
   cursor: pointer;
   transition: all var(--transition-fast);
   text-decoration: none;
@@ -568,7 +571,7 @@ body {
 
 .btn-primary {
   background: var(--color-primary);
-  color: var(--color-white);
+  color: #000000;
 }
 
 .btn-primary:hover {
@@ -577,14 +580,14 @@ body {
 }
 
 .btn-outline {
-  background: var(--color-white);
-  color: var(--color-text);
-  border: 2px solid #ccc;
+  background: #d9d9d9;
+  color: #000000;
+  border: 2px solid #d9d9d9;
 }
 
 .btn-outline:hover {
-  background: #f5f5f5;
-  border-color: #bbb;
+  background: #c8c8c8;
+  border-color: #c8c8c8;
 }
 
 .btn-large {
@@ -594,6 +597,18 @@ body {
 
 .btn-copy {
   padding: 10px 40px;
+}
+
+.btn-skip {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid #5aa9e6 !important;
+  font-weight: 700 !important;
+}
+
+.btn-skip:hover {
+  background: #f0f8fe !important;
+  border-color: #3d8fd4 !important;
 }
 
 /* ========================================
