@@ -4,7 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Desktop - Quick Create - Review</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
     <link rel="stylesheet" href="styles.css" />
     <style>
       .qc-final-section {
@@ -51,8 +54,16 @@
   </head>
   <body>
     <header class="header visible" id="main-header">
-      <div class="header-logo" onclick="goToPage('index.html')" style="cursor: pointer">
-        <img src="images/logo.png" alt="PlayWard Logo" class="header-logo-img" />
+      <div
+        class="header-logo"
+        onclick="goToPage('index.html')"
+        style="cursor: pointer"
+      >
+        <img
+          src="images/logo.png"
+          alt="PlayWard Logo"
+          class="header-logo-img"
+        />
         <span class="logo-text">PlayWard</span>
       </div>
       <nav class="header-nav">
@@ -70,25 +81,54 @@
             <div class="page-main">
               <h1 class="page-title">Review/Edit the Quick Create Prompt</h1>
               <p class="page-subtitle">
-                When your prompt is generated, select the "Copy and Open" button. The prompt will be copied and the recommended AI prompt engine will be opened in a new browser window. From there, simply select the AI's chat function and paste the prompt. Once you hit the send button, the AI will generate your activity! Make sure to check the final product for accuracy.
+                When your prompt is generated, select the "Copy and Open"
+                button. The prompt will be copied and the recommended AI prompt
+                engine will be opened in a new browser window. From there,
+                simply select the AI's chat function and paste the prompt. Once
+                you hit the send button, the AI will generate your activity!
+                Make sure to check the final product for accuracy.
               </p>
 
               <div class="qc-final-section">
                 <h2>Final Quick Create Prompt</h2>
                 <p class="qc-final-sub">
-                  If you need to change the prompt, you can either go back to previous<br>
-                  selections or click into the text box to type in and change the prompt manually.
+                  If you need to change the prompt, you can either go back to
+                  previous<br />
+                  selections or click into the text box to type in and change
+                  the prompt manually.
                 </p>
-                <textarea class="qc-prompt-box" id="qc-generated-prompt"></textarea>
+                <textarea
+                  class="qc-prompt-box"
+                  id="qc-generated-prompt"
+                ></textarea>
                 <div class="qc-final-actions">
-                  <button class="btn btn-primary" onclick="copyAndOpenGemini()">Copy and Open Gemini</button>
+                  <button class="btn btn-primary" onclick="copyAndOpenGemini()">
+                    Copy and Open Gemini
+                  </button>
                 </div>
+                <p
+                  style="
+                    text-align: right;
+                    font-size: 13px;
+                    color: #000000;
+                    margin-top: 8px;
+                  "
+                >
+                  This template has been tested with XXXX and been verified to
+                  <br />
+                  work XXX amount of times as of Date.
+                </p>
               </div>
             </div>
           </div>
 
           <div class="breadcrumb-with-back">
-            <button class="btn btn-outline btn-back" onclick="goToPage('qc-theme.html')">Back</button>
+            <button
+              class="btn btn-outline btn-back"
+              onclick="goToPage('qc-theme.html')"
+            >
+              Back
+            </button>
             <div class="progress-breadcrumb" id="progress-breadcrumb"></div>
           </div>
         </div>
@@ -123,11 +163,14 @@
 
       function copyAndOpenGemini() {
         const prompt = document.getElementById("qc-generated-prompt").value;
-        navigator.clipboard.writeText(prompt).then(() => {
-          window.open("https://gemini.google.com/app", "_blank");
-        }).catch(() => {
-          window.open("https://gemini.google.com/app", "_blank");
-        });
+        navigator.clipboard
+          .writeText(prompt)
+          .then(() => {
+            window.open("https://gemini.google.com/app", "_blank");
+          })
+          .catch(() => {
+            window.open("https://gemini.google.com/app", "_blank");
+          });
       }
     </script>
   </body>
