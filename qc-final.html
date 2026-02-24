@@ -34,15 +34,17 @@
         border-radius: 12px;
         padding: 28px 30px;
         text-align: left;
-        min-height: 220px;
+        min-height: 0;
         font-size: 14px;
         line-height: 1.6;
         color: var(--color-text);
         border: none;
         width: 100%;
-        resize: vertical;
+        resize: none;
+        overflow: hidden;
         font-family: inherit;
         outline: none;
+        box-sizing: border-box;
       }
 
       .qc-final-actions {
@@ -158,7 +160,14 @@
         };
 
         const prompt = templates[activity] || templates.coloring;
-        document.getElementById("qc-generated-prompt").value = prompt;
+        const ta = document.getElementById("qc-generated-prompt");
+        ta.value = prompt;
+        ta.style.height = "auto";
+        ta.style.height = ta.scrollHeight + "px";
+        ta.addEventListener("input", function () {
+          this.style.height = "auto";
+          this.style.height = this.scrollHeight + "px";
+        });
       }
 
       function copyAndOpenGemini() {

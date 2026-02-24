@@ -954,12 +954,15 @@ let qcData = loadQCData();
 
 // QC activity config — 3 activities only
 const qcActivityConfig = {
-  coloring: { name: "Coloring Page", icon: "images/coloringpage.png" },
+  coloring: { name: "Coloring Page", icon: "images/coloringpage1.png" },
   "spot-the-difference": {
     name: "Spot the Differences",
-    icon: "images/spotdiff.png",
+    icon: "images/spotdiff1.png",
   },
-  "hidden-objects": { name: "Hidden Objects", icon: "images/hiddenobject.png" },
+  "hidden-objects": {
+    name: "Hidden Objects",
+    icon: "images/hiddenobject1.png",
+  },
 };
 
 // QC theme config — icons match default-themes
@@ -983,8 +986,8 @@ function generateQCSidebar(step) {
   if (activity) {
     html += `
       <div class="sidebar-item active">
-        <div class="sidebar-icon-bg rectangle">
-          <img src="${activity.icon}" alt="${activity.name}">
+        <div class="sidebar-icon-bg rectangle" style="background: none; border: none; box-shadow: none; width: 110px; height: 100px;">
+          <img src="${activity.icon}" alt="${activity.name}" style="width: 100px; height: 100px; object-fit: contain;">
         </div>
         <span class="sidebar-label">${activity.name}</span>
       </div>
