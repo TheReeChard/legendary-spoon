@@ -289,33 +289,58 @@ function generateSidebar(currentPage) {
     </div>
   `;
 
-  // 2. Theme — show from theme-type onward (square)
-  if (stepIndex >= 0) {
-    const themeIcon =
+  // 2. Theme Type — show from default-themes/custom-theme onward (stepIndex >= 1)
+  if (stepIndex >= 1) {
+    const themeTypeIcon =
       appData.themeType === "custom"
         ? "images/customtheme.png"
         : "images/defaulttheme.png";
+    const themeTypeLabel =
+      appData.themeType === "custom" ? "Custom" : "Default";
+    const isThemeTypeActive =
+      currentPage === "default-themes" || currentPage === "custom-theme";
+    html += `
+      <div class="sidebar-item ${isThemeTypeActive ? "active" : ""}" onclick="goToPage('theme-type.html')" title="Change Theme Type">
+        <div class="sidebar-icon-bg rectangle" style="width: 95px; height: 70px;">
+          <img src="${themeTypeIcon}" alt="Theme Type" style="width: 55px; height: 55px; object-fit: contain;">
+        </div>
+        ${themeTypeLabel ? `<span class="sidebar-label">${themeTypeLabel}</span>` : ""}
+      </div>
+    `;
+  }
+
+  // 3. Specific Theme — show from personalization onward (stepIndex >= 3)
+  if (stepIndex >= 3) {
+    const themeIconMap = {
+      superheroes: "images/superhero.png",
+      animals: "images/animal.png",
+      sports: "images/sport.png",
+      space: "images/space.png",
+      ocean: "images/ocean.png",
+      nature: "images/nature.png",
+    };
     const themeLabel = appData.customTheme
       ? appData.customTheme
       : appData.theme
         ? appData.theme.charAt(0).toUpperCase() + appData.theme.slice(1)
         : "";
-    const isThemeActive =
-      currentPage === "default-themes" ||
-      currentPage === "custom-theme" ||
-      currentPage === "theme-type";
+    const themeIcon = appData.customTheme
+      ? "images/customtheme.png"
+      : appData.theme
+        ? themeIconMap[appData.theme] || "images/defaulttheme.png"
+        : "images/defaulttheme.png";
     html += `
-      <div class="sidebar-item ${isThemeActive ? "active" : ""}" onclick="goToPage('theme-type.html')" title="Change Theme">
+      <div class="sidebar-item" onclick="goToPage(appData.themeType === 'custom' ? 'custom-theme.html' : 'default-themes.html')" title="Change Theme">
         <div class="sidebar-icon-bg square">
           <img src="${themeIcon}" alt="Theme">
         </div>
-        ${!isThemeActive && themeLabel ? `<span class="sidebar-label">${themeLabel}</span>` : ""}
+        ${themeLabel ? `<span class="sidebar-label">${themeLabel}</span>` : ""}
       </div>
     `;
   }
 
-  // 3. Personalization — show from personalization onward (diamond)
-  if (stepIndex >= 3) {
+  // 4. Personalization (medical) — show from personalization2 onward (stepIndex >= 4)
+  if (stepIndex >= 4) {
     let medicalIcon = "images/girl1.png";
     let medicalLabel = "";
     if (appData.medicalConsiderations.length > 1) {
@@ -335,30 +360,24 @@ function generateSidebar(currentPage) {
         <div class="sidebar-icon-bg diamond">
           <img src="${medicalIcon}" alt="Personalization">
         </div>
-        ${!isPersonalizationActive && medicalLabel ? `<span class="sidebar-label">${medicalLabel}</span>` : ""}
+        ${medicalLabel ? `<span class="sidebar-label">${medicalLabel}</span>` : ""}
       </div>
     `;
   }
 
-  // 4. Age/Gender personalization — show from personalization2 onward (diamond variant)
-  if (stepIndex >= 4) {
-    const ageLabel = appData.ageRange ? appData.ageRange : "";
-    const ageIcons = {
-      "5-8": "images/age-5-8.png",
-      "9-12": "images/age-9-12.png",
-      "13-16": "images/age-13-16.png",
-    };
-    const ageIcon = ageIcons[appData.ageRange] || "images/age-5-8.png";
-    html += `
-      <div class="sidebar-item ${currentPage === "personalization2" ? "active" : ""}" onclick="goToPage('personalization2.html')" title="Edit Age/Gender">
-        <img src="images/age.png" alt="Age/Gender" style="width: 80px; height: 80px; object-fit: contain;">
-        ${currentPage !== "personalization2" && ageLabel ? `<span class="sidebar-label">${ageLabel}</span>` : ""}
-      </div>
-    `;
-  }
-
-  // 5. Customization — show from customization onward (pentagon)
+  // 5. Age/Gender — show from customization onward (stepIndex >= 5)
   if (stepIndex >= 5) {
+    const ageLabel = appData.ageRange ? appData.ageRange : "";
+    html += `
+      <div class="sidebar-item" onclick="goToPage('personalization2.html')" title="Edit Age/Gender">
+        <img src="images/age.png" alt="Age/Gender" style="width: 80px; height: 80px; object-fit: contain;">
+        ${ageLabel ? `<span class="sidebar-label">${ageLabel}</span>` : ""}
+      </div>
+    `;
+  }
+
+  // 6. Customization — show from review onward (stepIndex >= 6)
+  if (stepIndex >= 6) {
     let customIcon = "images/girl2.png";
     let customLabel = "";
     if (appData.customization.artStyle) {
@@ -382,31 +401,9 @@ function generateSidebar(currentPage) {
       customLabel = artStyleLabels[appData.customization.artStyle] || "";
     }
     html += `
-      <div class="sidebar-item ${currentPage === "customization" ? "active" : ""}" onclick="goToPage('customization.html')" title="Edit Customization">
-        <img src="${customIcon}" alt="Customization" style="width: 80px; height: 80px; object-fit: contain;">
-        ${currentPage !== "customization" && customLabel ? `<span class="sidebar-label">${customLabel}</span>` : ""}
-      </div>
-    `;
-  }
-
-  // 6. Review — show from review onward (square)
-  if (stepIndex >= 6) {
-    html += `
-      <div class="sidebar-item ${currentPage === "review" ? "active" : ""}" onclick="goToPage('review.html')" title="Review Selections">
-        <div class="sidebar-icon-bg square">
-          <img src="images/coloringpage.png" alt="Review">
-        </div>
-      </div>
-    `;
-  }
-
-  // 7. Final — show on final page only (rectangle)
-  if (stepIndex >= 7) {
-    html += `
-      <div class="sidebar-item ${currentPage === "final" ? "active" : ""}" onclick="goToPage('final.html')" title="Final Prompt">
-        <div class="sidebar-icon-bg rectangle">
-          <img src="${activity.icon}" alt="Final">
-        </div>
+      <div class="sidebar-item" onclick="goToPage('customization.html')" title="Edit Customization">
+        <img src="${customIcon}" alt="Customization" style="width: 65px; height: 65px; object-fit: contain; filter: grayscale(100%);">
+        ${customLabel ? `<span class="sidebar-label">${customLabel}</span>` : ""}
       </div>
     `;
   }
