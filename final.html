@@ -52,11 +52,32 @@
 
               <div class="final-prompt-section">
                 <h3>Final Prompt</h3>
-                <div class="prompt-box">
-                  <p id="generated-prompt">
-                    Your generated prompt will appear here...
-                  </p>
-                </div>
+                <p style="font-size: 13px; color: #555; margin-bottom: 10px">
+                  If you need to change the prompt, you can either go back to
+                  previous selections or click into the text box to type in and
+                  change the prompt manually.
+                </p>
+                <textarea
+                  id="generated-prompt"
+                  class="prompt-box"
+                  style="
+                    width: 100%;
+                    min-height: 0;
+                    resize: none;
+                    overflow: hidden;
+                    font-family: inherit;
+                    font-size: 14px;
+                    line-height: 1.6;
+                    border: none;
+                    outline: none;
+                    background: #f0f0f0;
+                    border-radius: 12px;
+                    padding: 20px;
+                    box-sizing: border-box;
+                  "
+                >
+Your generated prompt will appear here...</textarea
+                >
                 <div
                   style="
                     display: flex;
@@ -106,12 +127,19 @@
     <script src="shared.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        generateSidebar("final");
+        generateSidebar("review");
         generateBreadcrumb("final");
 
         // Generate and display the prompt
         const prompt = generatePrompt();
-        document.getElementById("generated-prompt").textContent = prompt;
+        const ta = document.getElementById("generated-prompt");
+        ta.value = prompt;
+        ta.style.height = "auto";
+        ta.style.height = ta.scrollHeight + "px";
+        ta.addEventListener("input", function () {
+          this.style.height = "auto";
+          this.style.height = this.scrollHeight + "px";
+        });
       });
 
       function copyAndOpenAI() {

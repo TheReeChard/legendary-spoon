@@ -343,11 +343,15 @@ function generateSidebar(currentPage) {
   // 4. Age/Gender personalization — show from personalization2 onward (diamond variant)
   if (stepIndex >= 4) {
     const ageLabel = appData.ageRange ? appData.ageRange : "";
+    const ageIcons = {
+      "5-8": "images/age-5-8.png",
+      "9-12": "images/age-9-12.png",
+      "13-16": "images/age-13-16.png",
+    };
+    const ageIcon = ageIcons[appData.ageRange] || "images/age-5-8.png";
     html += `
       <div class="sidebar-item ${currentPage === "personalization2" ? "active" : ""}" onclick="goToPage('personalization2.html')" title="Edit Age/Gender">
-        <div class="sidebar-icon-bg diamond">
-          <img src="images/girl1.png" alt="Age/Gender">
-        </div>
+        <img src="images/age.png" alt="Age/Gender" style="width: 80px; height: 80px; object-fit: contain;">
         ${currentPage !== "personalization2" && ageLabel ? `<span class="sidebar-label">${ageLabel}</span>` : ""}
       </div>
     `;
@@ -379,9 +383,7 @@ function generateSidebar(currentPage) {
     }
     html += `
       <div class="sidebar-item ${currentPage === "customization" ? "active" : ""}" onclick="goToPage('customization.html')" title="Edit Customization">
-        <div class="sidebar-icon-bg pentagon">
-          <img src="${customIcon}" alt="Customization">
-        </div>
+        <img src="${customIcon}" alt="Customization" style="width: 80px; height: 80px; object-fit: contain;">
         ${currentPage !== "customization" && customLabel ? `<span class="sidebar-label">${customLabel}</span>` : ""}
       </div>
     `;
@@ -616,7 +618,10 @@ function copyPrompt() {
   const promptElement = document.getElementById("generated-prompt");
   if (!promptElement) return;
 
-  const promptText = promptElement.textContent;
+  const promptText =
+    promptElement.value !== undefined
+      ? promptElement.value
+      : promptElement.textContent;
   navigator.clipboard
     .writeText(promptText)
     .then(() => {
@@ -641,7 +646,10 @@ function openInAI(platform) {
   const promptElement = document.getElementById("generated-prompt");
   if (!promptElement) return;
 
-  const promptText = promptElement.textContent;
+  const promptText =
+    promptElement.value !== undefined
+      ? promptElement.value
+      : promptElement.textContent;
 
   navigator.clipboard.writeText(promptText).then(() => {
     let url = "";
@@ -725,7 +733,7 @@ function artStyleGrid(styles, autoAdvance = true) {
     .map(
       (s) =>
         `<div class="art-style-item ${sel(appData.customization.artStyle, s)}" data-style="${s}" data-auto-advance="${autoAdvanceAttr}" style="cursor:pointer;">
-        <div class="art-style-pentagon" style="pointer-events: none;"><img src="${imgs[s]}" alt="${labels[s]}" style="pointer-events: none;"></div>
+        <img src="${imgs[s]}" alt="${labels[s]}" style="width: 160px; height: 160px; object-fit: contain; pointer-events: none;">
         <span class="art-style-label" style="pointer-events: none;">${labels[s]}</span>
       </div>`,
     )

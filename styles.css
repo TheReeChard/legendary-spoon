@@ -1102,6 +1102,16 @@ body {
   text-align: center;
   cursor: pointer;
   transition: transform var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.art-style-item > img {
+  width: 160px;
+  height: 160px;
+  object-fit: contain;
 }
 
 .art-style-item:hover {
