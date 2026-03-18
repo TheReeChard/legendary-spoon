@@ -89,6 +89,39 @@ const medicalIcons = {
 };
 
 // ========================================
+// Header Generation
+// ========================================
+function generateHeader() {
+  const header = document.getElementById("main-header");
+  if (!header) return;
+
+  // Detect which nav link should be "active" based on current page
+  const page = window.location.pathname.split("/").pop() || "index.html";
+  const aboutActive = page === "about.html" ? ' class="active"' : "";
+  const supportActive = page === "support.html" ? ' class="active"' : "";
+
+  header.className = "header visible";
+  header.innerHTML = `
+    <div class="header-logo" onclick="goToPage('index.html')" style="cursor:pointer">
+      <img src="images/logo.png" alt="PlayWard Logo" class="header-logo-img" />
+      <span class="logo-text">PlayWard</span>
+    </div>
+    <nav class="header-nav">
+      <a href="about.html"${aboutActive}>About Us</a>
+      <span>|</span>
+      <a href="support.html"${supportActive}>Need Help?</a>
+    </nav>
+  `;
+}
+
+// Auto-run on every page that has the header element
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", generateHeader);
+} else {
+  generateHeader();
+}
+
+// ========================================
 // Navigation
 // ========================================
 function goToPage(pageName) {
@@ -1006,6 +1039,138 @@ function generateQCSidebar(step) {
   }
 
   container.innerHTML = html;
+}
+
+// ========================================
+// Input Enhancement: Placeholders + Char Counters
+// ========================================
+
+// Placeholder text keyed by input id.
+// Max char limits: default 100, overrides below.
+const inputConfig = {
+  // custom-theme.html
+  "custom-theme-input": {
+    placeholder: "e.g. cars, beach, summer, shapes",
+    max: 60,
+  },
+  "theme-focus-input": {
+    placeholder: "e.g. the Lakers, Great Barrier Reef",
+    max: 60,
+  },
+  "theme-character-input": {
+    placeholder: "e.g. Michael Jordan, SpongeBob",
+    max: 60,
+  },
+
+  // personalization.html — no text inputs (medical icons only)
+
+  // personalization2.html
+  "child-description": {
+    placeholder: "e.g. loves soccer, has curly red hair",
+    max: 120,
+  },
+
+  // customization.html (injected via shared.js)
+  "objects-include": {
+    placeholder: "e.g. ball, rocket, umbrella, dog",
+    max: 100,
+  },
+  "num-differences": { placeholder: "e.g. 5", max: 3 },
+  "child-nickname": { placeholder: "e.g. Jay, Mia, Buddy", max: 40 },
+
+  // final.html / qc-final.html — large prompt textarea
+  "generated-prompt": {
+    placeholder: "Your generated prompt will appear here…",
+    max: 3000,
+  },
+  "qc-generated-prompt": {
+    placeholder: "Your generated prompt will appear here…",
+    max: 3000,
+  },
+};
+
+const DEFAULT_MAX = 100;
+
+function initInputs() {
+  // Covers both static inputs (already in DOM) and dynamic ones injected later
+  function enhance(el) {
+    if (el.dataset.pwEnhanced) return; // don't double-attach
+    el.dataset.pwEnhanced = "true";
+
+    const id = el.id || "";
+    const cfg = inputConfig[id] || {};
+    const max = cfg.max || DEFAULT_MAX;
+
+    // Set placeholder if not already set or is empty
+    if (cfg.placeholder && !el.getAttribute("placeholder")) {
+      el.setAttribute("placeholder", cfg.placeholder);
+    }
+
+    // Skip the generated-prompt textareas — they're filled programmatically
+    // and a counter there would be distracting; just set placeholder & bail.
+    if (id === "generated-prompt" || id === "qc-generated-prompt") return;
+
+    el.setAttribute("maxlength", max);
+
+    // Build counter element
+    const counter = document.createElement("span");
+    counter.className = "pw-char-counter";
+    counter.textContent = `0 / ${max}`;
+
+    // Insert after the input (inside its parent .input-with-icon if present,
+    // otherwise directly after the element)
+    el.parentNode.insertBefore(counter, el.nextSibling);
+
+    function update() {
+      const len = el.value.length;
+      counter.textContent = `${len} / ${max}`;
+      counter.classList.toggle("pw-char-counter--warn", len >= max * 0.85);
+      counter.classList.toggle("pw-char-counter--full", len >= max);
+    }
+
+    el.addEventListener("input", update);
+
+    // Show on focus, hide on blur (unless there's already content)
+    el.addEventListener("focus", () => {
+      update();
+      counter.classList.add("pw-char-counter--visible");
+    });
+    el.addEventListener("blur", () => {
+      if (!el.value.length)
+        counter.classList.remove("pw-char-counter--visible");
+    });
+
+    // If field already has a value (e.g. restored from appData), show counter
+    if (el.value.length) {
+      update();
+      counter.classList.add("pw-char-counter--visible");
+    }
+  }
+
+  // Enhance all text inputs and textareas currently in the DOM
+  document.querySelectorAll("input[type='text'], textarea").forEach(enhance);
+
+  // Watch for dynamically injected inputs (customization.html injects via innerHTML)
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((m) => {
+      m.addedNodes.forEach((node) => {
+        if (node.nodeType !== 1) return;
+        if (node.matches("input[type='text'], textarea")) enhance(node);
+        node.querySelectorAll &&
+          node
+            .querySelectorAll("input[type='text'], textarea")
+            .forEach(enhance);
+      });
+    });
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+}
+
+// Auto-run after DOM is ready
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initInputs);
+} else {
+  initInputs();
 }
 
 // Generate QC breadcrumb — 2 dots with girl3/girl4 runner
