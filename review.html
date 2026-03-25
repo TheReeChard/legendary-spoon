@@ -175,13 +175,11 @@
         const gender = genderLabels[appData.gender] || "";
         const childDescription = appData.childDescription || "";
         const medicalContext = formatMedicalContext();
-        const diversity = appData.diversity ? formatDiversityShort() : "";
 
         // Build sections
         let html = `<div class="review-section">
           <div class="review-section-title">Activity</div>
           ${row("Type", activityName)}
-          ${row("Difficulty", getDifficulty())}
         </div>`;
 
         html += `<div class="review-section">
@@ -214,7 +212,6 @@
           ${row("Gender", gender)}
           ${row("Child Description", childDescription)}
           ${row("Medical Considerations", medicalContext || "None selected")}
-          ${row("Diversity", diversity)}
         </div>`;
 
         container.innerHTML = html;

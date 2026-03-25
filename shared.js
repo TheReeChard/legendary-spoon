@@ -14,7 +14,6 @@ const defaultAppData = {
   themeFocus: "",
   themeCharacter: "",
   ageRange: "",
-  diversity: "",
   medicalConsiderations: [],
   customization: {},
 };
@@ -132,81 +131,69 @@ function goToPage(pageName) {
 // Prompt Templates
 // ========================================
 const promptTemplates = {
-  coloring: `Create a personalized, printable PDF coloring page for a {AGE_GROUP} year old child with the theme of {THEME}.
+  coloring: `Create a personalized, printable PDF coloring page for a {AGE_GROUP} year old {GENDER} with the theme of {THEME}.
 
 Activity Requirements:
 - Page Type: Standard Coloring Page
-- Complexity / Age Level: {DIFFICULTY}
 - Art Style: {ART_STYLE}
 - Theme or Character: {CHARACTER_INFO}
 
 Personalization:
-{NICKNAME_LINE}- Medical Context: {MEDICAL_CONTEXT}
+{NICKNAME_LINE}{GENDER_LINE}- Medical Context: {MEDICAL_CONTEXT}
 {CHILD_DESCRIPTION_LINE}
-{DIVERSITY_REQUIREMENTS}
 
 The page should be a standard coloring page with medium complexity and bold cartoon lines.{NICKNAME_INSTRUCTION}{NICKNAME_TEXT_INSTRUCTION}`,
 
-  "spot-the-difference": `Create a personalized, printable spot-the-difference activity for a {AGE_GROUP} year old child with the theme of {THEME}.
+  "spot-the-difference": `Create a personalized, printable spot-the-difference activity for a {AGE_GROUP} year old {GENDER} with the theme of {THEME}.
 
 Activity Requirements:
 - Page Type: Spot the Difference
-- Complexity / Age Level: {DIFFICULTY}
 - Art Style: {ART_STYLE}
 - Theme or Character: {CHARACTER_INFO}
 - Number of Differences: {NUM_DIFFERENCES}
 - Objects to Include: {OBJECTS_TO_INCLUDE}
 
 Personalization:
-{NICKNAME_LINE}- Medical Context: {MEDICAL_CONTEXT}
+{NICKNAME_LINE}{GENDER_LINE}- Medical Context: {MEDICAL_CONTEXT}
 {CHILD_DESCRIPTION_LINE}
-{DIVERSITY_REQUIREMENTS}
 
 Create two nearly identical side-by-side illustrations based on the theme, with {NUM_DIFFERENCES} subtle differences between them. Include a checklist or answer key at the bottom.{NICKNAME_INSTRUCTION}`,
 
-  "hidden-objects": `Create a personalized hidden objects activity for a {AGE_GROUP} year old child with the theme of {THEME}.
+  "hidden-objects": `Create a personalized hidden objects activity for a {AGE_GROUP} year old {GENDER} with the theme of {THEME}.
 
 Activity Requirements:
 - Page Type: Hidden Objects Activity
-- Complexity / Age Level: {DIFFICULTY}
 - Art Style: {ART_STYLE}
 - Theme or Character: {CHARACTER_INFO}
 - Objects to Include: {OBJECTS_TO_INCLUDE}
 
 Personalization:
-{NICKNAME_LINE}- Medical Context: {MEDICAL_CONTEXT}
+{NICKNAME_LINE}{GENDER_LINE}- Medical Context: {MEDICAL_CONTEXT}
 {CHILD_DESCRIPTION_LINE}
-{DIVERSITY_REQUIREMENTS}
 
 Create a detailed scene with hidden objects that are challenging but findable. Include a checklist of items to find.{NICKNAME_INSTRUCTION}`,
 
-  crossword: `Create a personalized, printable crossword puzzle for a {AGE_GROUP} year old child with the theme of {THEME}.
+  crossword: `Create a personalized, printable crossword puzzle for a {AGE_GROUP} year old {GENDER} with the theme of {THEME}.
 
 Activity Requirements:
 - Page Type: Crossword Puzzle
-- Difficulty: {DIFFICULTY}
 - Word Count: {WORD_COUNT}
 - Theme or Character: {CHARACTER_INFO}
 
 Personalization:
-{NICKNAME_LINE}- Medical Context: {MEDICAL_CONTEXT}
-
-{DIVERSITY_REQUIREMENTS}
+{NICKNAME_LINE}{GENDER_LINE}- Medical Context: {MEDICAL_CONTEXT}
 
 Generate age-appropriate crossword clues and answers themed around {THEME}. Include an answer key on a separate section.{NICKNAME_INSTRUCTION}`,
 
-  wordsearch: `Create a personalized, printable word search puzzle for a {AGE_GROUP} year old child with the theme of {THEME}.
+  wordsearch: `Create a personalized, printable word search puzzle for a {AGE_GROUP} year old {GENDER} with the theme of {THEME}.
 
 Activity Requirements:
 - Page Type: Word Search
-- Difficulty: {DIFFICULTY}
 - Grid Size: {GRID_SIZE}
 - Theme or Character: {CHARACTER_INFO}
 
 Personalization:
-{NICKNAME_LINE}- Medical Context: {MEDICAL_CONTEXT}
-
-{DIVERSITY_REQUIREMENTS}
+{NICKNAME_LINE}{GENDER_LINE}- Medical Context: {MEDICAL_CONTEXT}
 
 Generate a {GRID_SIZE} word search grid filled with theme-related words. Include the word list below the grid and an answer key.{NICKNAME_INSTRUCTION}`,
 };
@@ -219,14 +206,12 @@ function formatTheme(theme) {
   return theme.charAt(0).toUpperCase() + theme.slice(1).replace("-", " ");
 }
 
-function getDifficulty() {
-  const age = appData.ageRange;
-  if (age === "3-5") return "Very Easy";
-  if (age === "6-8") return "Easy";
-  if (age === "9-11") return "Medium";
-  if (age === "12-14") return "Medium-Hard";
-  if (age === "15-18") return "Hard";
-  return "Medium";
+function formatGender() {
+  const g = appData.gender;
+  if (!g || g === "do-not-specify") return "";
+  if (g === "male") return "boy";
+  if (g === "female") return "girl";
+  return "";
 }
 
 function formatMedicalContext() {
@@ -248,37 +233,6 @@ function formatMedicalContext() {
     .join(", ");
 }
 
-function formatDiversityShort() {
-  const names = {
-    multicultural: "Multicultural",
-    "gender-inclusive": "Gender-inclusive",
-    accessibility: "Visual accessibility",
-    language: "Simplified language",
-  };
-  return names[appData.diversity] || appData.diversity;
-}
-
-function formatDiversityRequirements() {
-  if (!appData.diversity) {
-    return "";
-  }
-  switch (appData.diversity) {
-    case "multicultural":
-      return "Include diverse cultural representations and backgrounds.";
-    case "gender-inclusive":
-      return "Use gender-inclusive language and diverse character representations.";
-    case "accessibility":
-      return "Ensure visual accessibility with high contrast, clear images, and large text.";
-    case "language":
-      return "Use simplified language appropriate for ESL learners.";
-    default:
-      return "";
-  }
-}
-
-// ========================================
-// Dynamic Sidebar Generation
-// ========================================
 function generateSidebar(currentPage) {
   const sidebarContainer = document.getElementById("dynamic-sidebar");
   if (!sidebarContainer) return;
@@ -537,11 +491,7 @@ function getCompletedSteps() {
   }
 
   // Step 3: Personalization
-  if (
-    appData.ageRange ||
-    appData.diversity ||
-    appData.medicalConsiderations.length > 0
-  ) {
+  if (appData.ageRange || appData.medicalConsiderations.length > 0) {
     completed.push(3);
   }
 
@@ -613,13 +563,19 @@ function generatePrompt() {
     ? `- Child Description: ${childDescription}\n`
     : "";
 
+  const genderText = formatGender();
+  // Inline: replaces "child" in the opening line when gender is known
+  const genderInline = genderText || "child";
+  // Personalization block line: only shown when gender is known
+  const genderLine = genderText ? `- Gender: ${genderText}\n` : "";
+
   const replacements = {
     "{AGE_GROUP}": appData.ageRange || "",
+    "{GENDER}": genderInline,
+    "{GENDER_LINE}": genderLine,
     "{THEME}": themeToUse || "",
     "{CHARACTER_INFO}": appData.themeCharacter || "",
     "{MEDICAL_CONTEXT}": formatMedicalContext(),
-    "{DIVERSITY_REQUIREMENTS}": formatDiversityRequirements(),
-    "{DIFFICULTY}": getDifficulty(),
     "{ART_STYLE}": appData.customization.artStyle || "",
     "{NICKNAME_LINE}": nicknameLineText,
     "{NICKNAME_INSTRUCTION}": nicknameInstruction,
@@ -1050,7 +1006,7 @@ function generateQCSidebar(step) {
 const inputConfig = {
   // custom-theme.html
   "custom-theme-input": {
-    placeholder: "e.g. cars, beach, summer, shapes",
+    placeholder: "e.g. cars, beach, dinosaurs, space",
     max: 60,
   },
   "theme-focus-input": {
