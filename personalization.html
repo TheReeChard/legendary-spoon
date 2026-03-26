@@ -11,12 +11,11 @@
     <link rel="stylesheet" href="styles.css" />
     <style>
       .medical-grid-new {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(4, 160px);
         justify-content: center;
-        gap: 50px;
+        gap: 30px 40px;
         margin-bottom: 35px;
-        max-width: 640px;
         margin-left: auto;
         margin-right: auto;
       }
@@ -152,6 +151,16 @@
                     </div>
                     <div
                       class="medical-item"
+                      data-medical="iv"
+                      onclick="toggleMedical('iv')"
+                    >
+                      <div class="medical-diamond">
+                        <img src="images/iv.png" alt="IV" />
+                      </div>
+                      <span>IV</span>
+                    </div>
+                    <div
+                      class="medical-item"
                       data-medical="surgery"
                       onclick="toggleMedical('surgery')"
                     >
@@ -162,13 +171,13 @@
                     </div>
                     <div
                       class="medical-item"
-                      data-medical="cast"
-                      onclick="toggleMedical('cast')"
+                      data-medical="halo"
+                      onclick="toggleMedical('halo')"
                     >
                       <div class="medical-diamond">
-                        <img src="images/cast.png" alt="Cast" />
+                        <img src="images/halo.png" alt="Halo" />
                       </div>
-                      <span>Cast</span>
+                      <span>Halo</span>
                     </div>
                     <div
                       class="medical-item"
@@ -179,6 +188,16 @@
                         <img src="images/anxiety.png" alt="Anxiety" />
                       </div>
                       <span>Anxiety</span>
+                    </div>
+                    <div
+                      class="medical-item"
+                      data-medical="ngtube"
+                      onclick="toggleMedical('ngtube')"
+                    >
+                      <div class="medical-diamond">
+                        <img src="images/ngtube.png" alt="NG Tube" />
+                      </div>
+                      <span>NG Tube</span>
                     </div>
                   </div>
                 </div>

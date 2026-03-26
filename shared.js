@@ -81,10 +81,12 @@ const activityConfig = {
 const medicalIcons = {
   wheelchair: "images/wheelchair.png",
   syringe: "images/syringe.png",
-  anxiety: "images/anxiety.png",
-  surgery: "images/surgery.png",
-  cast: "images/cast.png",
   pain: "images/pain.png",
+  iv: "images/iv.png",
+  surgery: "images/surgery.png",
+  halo: "images/halo.png",
+  anxiety: "images/anxiety.png",
+  ngtube: "images/ngtube.png",
 };
 
 // ========================================
@@ -223,10 +225,12 @@ function formatMedicalContext() {
       const names = {
         wheelchair: "Wheelchair",
         syringe: "IV/Injections",
-        anxiety: "Anxiety",
-        surgery: "Surgery",
-        cast: "Cast",
         pain: "Pain",
+        iv: "IV",
+        surgery: "Surgery",
+        halo: "Halo",
+        anxiety: "Anxiety",
+        ngtube: "NG Tube",
       };
       return names[m] || m;
     })
