@@ -66,8 +66,8 @@
         background: #1a405d;
         color: #fff;
         border-radius: 16px;
-        padding: 36px 40px 32px;
-        max-width: 420px;
+        padding: 48px 56px 44px;
+        max-width: 580px;
         width: 90%;
         text-align: center;
         position: relative;
@@ -75,46 +75,56 @@
         animation: modalPop 0.25s ease;
       }
       @keyframes modalPop {
-        from { transform: scale(0.88); opacity: 0; }
-        to   { transform: scale(1);    opacity: 1; }
+        from {
+          transform: scale(0.88);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
       }
       .pw-modal-close {
         position: absolute;
-        top: 12px;
-        right: 16px;
+        top: 14px;
+        right: 20px;
         background: none;
         border: none;
         color: #fff;
-        font-size: 20px;
+        font-size: 24px;
         cursor: pointer;
         opacity: 0.75;
         line-height: 1;
       }
-      .pw-modal-close:hover { opacity: 1; }
+      .pw-modal-close:hover {
+        opacity: 1;
+      }
       .pw-modal h2 {
-        font-size: 22px;
+        font-size: 28px;
         font-weight: 700;
-        margin-bottom: 14px;
+        margin-bottom: 18px;
         line-height: 1.35;
       }
       .pw-modal p {
-        font-size: 13px;
+        font-size: 20px;
         line-height: 1.65;
         opacity: 0.9;
-        margin-bottom: 26px;
+        margin-bottom: 32px;
       }
       .pw-modal .btn-continue {
-        background: #DB6E3B;
+        background: #db6e3b;
         color: #fff;
         border: none;
         border-radius: 20px;
-        padding: 10px 36px;
-        font-size: 15px;
+        padding: 14px 48px;
+        font-size: 20px;
         font-weight: 700;
         cursor: pointer;
         transition: background 0.2s;
       }
-      .pw-modal .btn-continue:hover { background: #c25e2e; }
+      .pw-modal .btn-continue:hover {
+        background: #c25e2e;
+      }
 
       /* Stage 2 spinner */
       .pw-modal.stage2 .spinner {
@@ -126,7 +136,11 @@
         animation: spin 0.8s linear infinite;
         margin: 0 auto 18px;
       }
-      @keyframes spin { to { transform: rotate(360deg); } }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
 
       /* ── Confetti canvas ── */
       #confetti-canvas {
@@ -147,7 +161,7 @@
             <div class="dynamic-sidebar" id="dynamic-sidebar"></div>
             <div class="page-main">
               <h1 class="page-title">Review/Edit the Quick Create Prompt</h1>
-              <p class="page-subtitle" style="font-size: 16px;">
+              <p class="page-subtitle" style="font-size: 16px">
                 When your prompt is generated, select the "Copy" button. The
                 prompt will be copied and you can then open the recommended AI
                 prompt engine in a new browser window. From there, simply select
@@ -157,8 +171,8 @@
               </p>
 
               <div class="qc-final-section">
-                <h2>Final Quick Create Prompt</h2>
-                <p class="qc-final-sub">
+                <h2 style="text-align: left">Final Quick Create Prompt</h2>
+                <p class="qc-final-sub" style="text-align: left">
                   If you need to change the prompt, you can either go back to
                   previous<br />
                   selections or click into the text box to type in and change
@@ -173,7 +187,14 @@
                     Copy
                   </button>
                 </div>
-                <p style="text-align: right; font-size: 13px; color: #000000; margin-top: 8px;">
+                <p
+                  style="
+                    text-align: right;
+                    font-size: 13px;
+                    color: #000000;
+                    margin-top: 8px;
+                  "
+                >
                   This template has been tested with XXXX and been verified to
                   <br />
                   work XXX amount of times as of Date.
@@ -201,14 +222,18 @@
     <!-- Modal Stage 1: Prompt copied — confirm before opening AI -->
     <div class="pw-modal-overlay" id="modal-stage1">
       <div class="pw-modal">
-        <button class="pw-modal-close" onclick="closeAllModals()">&times;</button>
+        <button class="pw-modal-close" onclick="closeAllModals()">
+          &times;
+        </button>
         <h2>Your prompt has been copied!</h2>
         <p>
           You are now leaving the PlayWard site. We cannot guarantee the
-          accuracy of the AI Agent as the agents are continuously updating.
-          Be sure to check all final outputs before use.
+          accuracy of the AI Agent as the agents are continuously updating. Be
+          sure to check all final outputs before use.
         </p>
-        <button class="btn-continue" onclick="proceedToAI()">Continue to AI</button>
+        <button class="btn-continue" onclick="proceedToAI()">
+          Continue to AI
+        </button>
       </div>
     </div>
 
@@ -216,11 +241,11 @@
     <div class="pw-modal-overlay" id="modal-stage2">
       <div class="pw-modal stage2">
         <div class="spinner"></div>
-        <h2>Success!<br>Your prompt is being copied...</h2>
+        <h2>Success!<br />Your prompt is being copied...</h2>
         <p>
-          You are leaving the PlayWard site. We cannot guarantee the
-          accuracy of the AI Agent as the agents are continuously updating.
-          Be sure to check all final outputs before use.
+          You are leaving the PlayWard site. We cannot guarantee the accuracy of
+          the AI Agent as the agents are continuously updating. Be sure to check
+          all final outputs before use.
         </p>
       </div>
     </div>
@@ -289,8 +314,14 @@
         canvas.height = window.innerHeight;
 
         const colors = [
-          "#5aa9e6", "#1a405d", "#ffd700", "#ff6b6b",
-          "#6bcb77", "#ff9f43", "#ffffff", "#c084fc",
+          "#5aa9e6",
+          "#1a405d",
+          "#ffd700",
+          "#ff6b6b",
+          "#6bcb77",
+          "#ff9f43",
+          "#ffffff",
+          "#c084fc",
         ];
 
         const pieces = Array.from({ length: 180 }, () => ({
