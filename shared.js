@@ -263,7 +263,7 @@ function generateSidebar(currentPage) {
   ];
   const stepIndex = stepOrder.indexOf(currentPage);
 
-  let html = "";
+  let html = `<div class="sidebar-previous-label" style="text-align: center; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #888; margin-bottom: calc(-0.9rem + 2px); padding: 0 6px; line-height: 1.3;">Previous<br>Choices</div>`;
 
   // 1. Activity — always show (rectangle)
   const activityLabel = activity.name || "";
@@ -760,12 +760,12 @@ function getSpotDiffCustomization() {
     <div style="display: flex; gap: 24px; margin-top: 24px;">
       <div class="form-group" style="flex: 1;">
         <label>Objects to Include</label>
-        <span class="hint">Input any specific objects you want to be included</span>
+        <span class="hint">This is optional</span>
         <input type="text" id="objects-include" placeholder="" value="${objectsVal}">
       </div>
       <div class="form-group" style="flex: 1;">
         <label>Number of Differences</label>
-        <span class="hint">Input the number of differences between the two images</span>
+        <span class="hint">This is optional</span>
         <input type="text" id="num-differences" placeholder="" value="${ndVal}">
       </div>
     </div>
@@ -791,6 +791,7 @@ function getHiddenObjectsCustomization() {
     </div>
     <div class="form-group" style="margin-top: 24px;">
       <label>Objects to Include</label>
+      <span class="hint"><em>This is optional</em></span>
       <input type="text" id="objects-include" placeholder="Enter any specific objects" value="${objectsVal}">
     </div>
     <div style="display: flex; justify-content: flex-end; margin-top: 16px;">
