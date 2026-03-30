@@ -971,12 +971,13 @@ function generateQCSidebar(step) {
   const container = document.getElementById("dynamic-sidebar");
   if (!container) return;
 
-  let html = "";
+  let html = `<div class="sidebar-previous-label" style="text-align: center; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #888; margin-bottom: calc(-0.9rem + 2px); padding: 0 6px; line-height: 1.3;">Previous<br>Choices</div>`;
 
+  // 1. Activity — always show once selected
   const activity = qcActivityConfig[qcData.activity];
   if (activity) {
     html += `
-      <div class="sidebar-item active">
+      <div class="sidebar-item" onclick="goToPage('qc-select.html')" title="Change Activity">
         <div class="sidebar-icon-bg rectangle" style="background: none; border: none; box-shadow: none; width: 110px; height: 100px;">
           <img src="${activity.icon}" alt="${activity.name}" style="width: 100px; height: 100px; object-fit: contain;">
         </div>
@@ -985,6 +986,7 @@ function generateQCSidebar(step) {
     `;
   }
 
+  // 2. Theme — show at step 2 once selected
   if (step >= 2 && qcData.theme) {
     const theme = qcThemeConfig[qcData.theme];
     if (theme) {
