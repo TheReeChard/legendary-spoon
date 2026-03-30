@@ -264,11 +264,11 @@
         const themeLabel = theme.charAt(0).toUpperCase() + theme.slice(1);
 
         const templates = {
-          coloring: `Create a personalized, printable PDF coloring page for a child with the theme of ${themeLabel}.\n\nActivity Requirements:\n- Page Type: Standard Coloring Page\n- Complexity / Age Level: Medium\n- Art Style: Bold Cartoon Lines\n- Theme: ${themeLabel}\n\nThe page should feature bold outlines and fun, age-appropriate imagery themed around ${themeLabel}. Keep the design engaging and easy to color with clear sections and a cheerful overall feel.`,
+          coloring: `Create a personalized image of a coloring page for a child with the theme of ${themeLabel}.\n\nActivity Requirements:\n- Page Type: Standard Coloring Page\n- Complexity / Age Level: 5-8\n- Art Style: Bold Cartoon Lines\n- Theme: ${themeLabel}\n\nThe page should feature bold outlines and fun, age-appropriate imagery themed around ${themeLabel}. Keep the design engaging and easy to color with clear sections and a cheerful overall feel.`,
 
-          "spot-the-difference": `Create a personalized, printable spot-the-difference activity for a child with the theme of ${themeLabel}.\n\nActivity Requirements:\n- Page Type: Spot the Difference\n- Complexity / Age Level: Medium\n- Number of Differences: 5\n- Theme: ${themeLabel}\n\nCreate two nearly identical side-by-side illustrations featuring ${themeLabel}-themed imagery with 5 subtle differences between them. Include a checklist at the bottom for the child to mark each difference they find.`,
+          "spot-the-difference": `Create a personalized image of a spot-the-difference game for a child with the theme of ${themeLabel}.\n\nActivity Requirements:\n- Page Type: Spot the Difference\n- Complexity / Age Level: 5-8\n- Number of Differences: 3\n- Theme: ${themeLabel}\n\nCreate two very similar side-by-side illustrations featuring ${themeLabel}-themed imagery with 3 subtle differences between them. Include a checklist at the bottom for the child to mark each difference they find.`,
 
-          "hidden-objects": `Create a personalized, printable hidden objects activity for a child with the theme of ${themeLabel}.\n\nActivity Requirements:\n- Page Type: Hidden Objects\n- Complexity / Age Level: Medium\n- Theme: ${themeLabel}\n\nCreate a detailed, fun scene themed around ${themeLabel} with 10 hidden objects for the child to find. Include a picture checklist of the objects to find at the bottom of the page.`,
+          "hidden-objects": `Create a personalized image of a hidden objects game for a child with the theme of ${themeLabel}.\n\nActivity Requirements:\n- Page Type: Hidden Objects\n- Complexity / Age Level: 5-8\n- Theme: ${themeLabel}\n\nCreate a fun scene themed around ${themeLabel} with 3 hidden objects for the child to find. Include a checklist of the game's hidden objects at the bottom of the page.`,
         };
 
         const prompt = templates[activity] || templates.coloring;
