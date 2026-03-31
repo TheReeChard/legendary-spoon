@@ -161,7 +161,7 @@ Personalization:
 
 Create two nearly identical side-by-side illustrations based on the theme, with {NUM_DIFFERENCES} subtle differences between them. Include a checklist or answer key at the bottom.{NICKNAME_INSTRUCTION}`,
 
-  "hidden-objects": `Create a personalized hidden objects activity for a {AGE_GROUP} year old {GENDER} with the theme of {THEME}.
+  "hidden-objects": `Create an image of a personalized hidden objects activity for a {AGE_GROUP} year old {GENDER} with the theme of {THEME}.
 
 Activity Requirements:
 - Page Type: Hidden Objects Activity

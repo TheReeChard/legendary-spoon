@@ -152,11 +152,7 @@
                     Copy
                   </button>
                 </div>
-                <p style="text-align: right; font-size: 13px; color: #000000; margin-top: 8px;">
-                  This template has been tested with XXXX and been verified to
-                  <br />
-                  work XXX amount of times as of Date.
-                </p>
+                <p id="verified-text" style="text-align: right; font-size: 13px; color: #000000; margin-top: 8px;"></p>
               </div>
             </div>
           </div>
@@ -218,6 +214,17 @@
           this.style.height = "auto";
           this.style.height = this.scrollHeight + "px";
         });
+
+        // Set activity-specific verified text
+        const verifiedText = document.getElementById("verified-text");
+        const activity = appData.activityType;
+        if (activity === "spot-the-difference") {
+          verifiedText.innerHTML = "This template has been tested and been verified to<br>work 100% using Copilot.";
+        } else if (activity === "coloring") {
+          verifiedText.innerHTML = "This template has been tested and been verified to<br>work 100% with Gemini as of 3/15/26.";
+        } else if (activity === "hidden-objects") {
+          verifiedText.innerHTML = "This template has been tested and been verified to<br>work 96% using Gemini as of 3/29/26.";
+        }
       });
 
       function handleCopy() {
@@ -239,8 +246,12 @@
       function proceedToAI() {
         document.getElementById("modal-stage1").classList.remove("active");
         document.getElementById("modal-stage2").classList.add("active");
+        const activity = appData.activityType;
+        const url = (activity === "spot-the-difference")
+          ? "https://copilot.microsoft.com"
+          : "https://gemini.google.com/app";
         setTimeout(function () {
-          window.open("https://gemini.google.com/app", "_blank");
+          window.open(url, "_blank");
           document.getElementById("modal-stage2").classList.remove("active");
         }, 1800);
       }
