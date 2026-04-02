@@ -12,27 +12,15 @@
     <style>
       .video-placeholder {
         width: 370px;
-        height: 200px;
-        background: #d9d9d9;
-        border-radius: 16px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
         margin: 30px auto 28px;
-        cursor: pointer;
-        gap: 10px;
+        border-radius: 16px;
+        overflow: hidden;
+        display: block;
       }
-      .video-placeholder .play-icon {
-        width: 0;
-        height: 0;
-        border-top: 18px solid transparent;
-        border-bottom: 18px solid transparent;
-        border-left: 30px solid #333;
-      }
-      .video-placeholder span {
-        font-size: 13px;
-        color: #555;
+      .video-placeholder img {
+        width: 100%;
+        height: auto;
+        display: block;
       }
       .amuselabs-cta {
         display: flex;
@@ -56,8 +44,7 @@
             </p>
 
             <div class="video-placeholder">
-              <div class="play-icon"></div>
-              <span>Video instructions</span>
+              <img src="images/vid.png" alt="Video instructions" />
             </div>
 
             <div class="amuselabs-cta">
